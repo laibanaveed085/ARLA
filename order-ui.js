@@ -52,18 +52,50 @@ function addMenuActions() {
   for (const row of document.querySelectorAll("[data-order-item]")) {
     const item = menuById.get(row.dataset.orderItem);
     if (!item) continue;
-    const button = document.createElement("button");
-    button.className = "menu-add-button";
-    button.type = "button";
-    button.textContent = "Add to order";
-    button.setAttribute("aria-label", `Add ${item.name} to your order`);
-    button.addEventListener("click", () => {
-      cart[item.id] = Math.min(20, (cart[item.id] || 0) + 1);
-      saveCart();
-      setCartMessage(`${item.name} added to your cart.`);
-      renderCart();
-    });
-    row.append(button);
+    const controls = document.createElement("span");
+    controls.className = "menu-item-controls";
+    controls.dataset.menuControls = item.id;
+    row.append(controls);
+  }
+  renderMenuControls();
+}
+
+function renderMenuControls() {
+  for (const rowControls of document.querySelectorAll("[data-menu-controls]")) {
+    const item = menuById.get(rowControls.dataset.menuControls);
+    const quantity = cart[item.id] || 0;
+    rowControls.replaceChildren();
+
+    if (quantity === 0) {
+      const addButton = document.createElement("button");
+      addButton.className = "menu-add-button";
+      addButton.type = "button";
+      addButton.textContent = "Add to order";
+      addButton.setAttribute("aria-label", `Add ${item.name} to your order`);
+      addButton.addEventListener("click", () => changeQuantity(item.id, 1));
+      rowControls.append(addButton);
+      continue;
+    }
+
+    const stepper = document.createElement("span");
+    stepper.className = "menu-quantity-control";
+    const decreaseButton = document.createElement("button");
+    decreaseButton.type = "button";
+    decreaseButton.textContent = "−";
+    decreaseButton.setAttribute("aria-label", `Decrease ${item.name} quantity`);
+    decreaseButton.addEventListener("click", () => changeQuantity(item.id, -1));
+    const quantityValue = document.createElement("span");
+    quantityValue.className = "menu-quantity-value";
+    quantityValue.textContent = String(quantity);
+    quantityValue.setAttribute("aria-label", `${quantity} ${item.name} in order`);
+    const increaseButton = document.createElement("button");
+    increaseButton.type = "button";
+    increaseButton.textContent = "+";
+    increaseButton.disabled = quantity >= 20;
+    increaseButton.setAttribute("aria-label", `Increase ${item.name} quantity`);
+    increaseButton.addEventListener("click", () => changeQuantity(item.id, 1));
+    stepper.append(decreaseButton, quantityValue, increaseButton);
+    rowControls.append(stepper);
   }
 }
 
@@ -81,6 +113,7 @@ function selectedZone() {
 }
 
 function renderCart() {
+  renderMenuControls();
   cartList.replaceChildren();
   let count = 0;
   const items = [];
@@ -137,10 +170,11 @@ function renderCart() {
   cartEmpty.hidden = items.length !== 0;
   const subtotalCents = items.reduce((sum, item) => sum + item.priceCents * item.quantity, 0);
   const zone = selectedZone();
-  const deliveryFeeCents = selectedFulfillment() === "delivery" && zone ? zone.feeCents : 0;
+  const deliveryFeeCents = selectedFulfillment() === "delivery"
+    ? (zone?.feeCents ?? config?.deliveryFeeCents ?? 299)
+    : 0;
   document.querySelector("#cart-subtotal").textContent = money.format(subtotalCents / 100);
-  document.querySelector("#cart-delivery").textContent =
-    selectedFulfillment() === "delivery" && !zone ? "Check address" : money.format(deliveryFeeCents / 100);
+  document.querySelector("#cart-delivery").textContent = money.format(deliveryFeeCents / 100);
 
   if (config?.taxRatePercent !== null && config?.taxRatePercent !== undefined) {
     const totals = calculateTotals(
@@ -165,7 +199,10 @@ function changeQuantity(id, change) {
   if (nextQuantity < 1) delete cart[id];
   else cart[id] = Math.min(20, nextQuantity);
   saveCart();
-  setCartMessage("Cart updated.");
+  const item = menuById.get(id);
+  setCartMessage(nextQuantity < 1
+    ? `${item.name} removed from your order.`
+    : `${item.name} quantity: ${Math.min(nextQuantity, 20)}.`);
   renderCart();
 }
 

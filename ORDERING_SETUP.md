@@ -7,6 +7,7 @@
 - Orders are saved by Vercel serverless functions to Supabase. A confirmation appears only after Supabase accepts the order.
 - The staff dashboard is at `/staff.html`. Its API verifies Supabase sign-in and an explicit staff email allowlist before returning or changing order data.
 - Delivery can be enabled for specific city/ZIP-code pairs, with separate fee and minimum values. Only configure addresses ARLA has verified as serviceable.
+- Delivery costs $2.99 by default. The shared fee is `ARLA_DELIVERY_FEE_CENTS=299`; an individual verified delivery zone can override that with its own `feeCents`.
 - Online card payments and email notifications are not implemented. The checkout clearly tells customers that ARLA will confirm the available payment method.
 
 The customer-facing menu descriptions were not provided, so the ordering UI identifies them as “Description not provided” rather than inventing food details.
@@ -20,7 +21,8 @@ The customer-facing menu descriptions were not provided, so the ordering UI iden
    - `ARLA_STAFF_EMAILS`, the allowlisted staff email addresses.
    - `ARLA_TAX_RATE`, a percentage confirmed for ARLA. Use `0` only if a qualified source confirms no tax applies.
    - `ARLA_TAX_DELIVERY`, set to `true` or `false` only after confirming whether the configured tax applies to the delivery fee. Tax is calculated on the food subtotal and, when set to `true`, the delivery fee.
-   - `ARLA_DELIVERY_ZONES`, a JSON array. Each entry has `city`, `zipCodes`, `feeCents`, and `minimumCents`; for example, use a structure such as `[{"city":"Gaithersburg","zipCodes":["REPLACE_WITH_VERIFIED_ZIP"],"feeCents":0,"minimumCents":0}]` only after replacing the placeholder and setting ARLA's actual fee/minimum. Fees and minimums are integer cents. Supported city names are Germantown, Rockville, and Gaithersburg. An empty array leaves delivery unavailable.
+   - `ARLA_DELIVERY_FEE_CENTS`, normally `299` ($2.99). A delivery zone can provide an optional `feeCents` override.
+   - `ARLA_DELIVERY_ZONES`, a JSON array. Each entry has `city`, `zipCodes`, and `minimumCents`; `feeCents` is optional and defaults to the shared $2.99. For example, use a structure such as `[{"city":"Gaithersburg","zipCodes":["REPLACE_WITH_VERIFIED_ZIP"],"minimumCents":0}]` only after replacing the placeholder and setting ARLA's actual minimum. Fees and minimums are integer cents. Supported city names are Germantown, Rockville, and Gaithersburg. An empty array leaves delivery unavailable.
 4. Deploy the project through the existing Vercel integration. Verify a real test order appears in `/staff.html`, update its status, then remove the test order before advertising online ordering.
 
 Checkout remains disabled until the database, staff access, tax rate, and taxability setting are all configured. The existing phone and browser-based WhatsApp Web order links remain available during setup.

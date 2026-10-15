@@ -547,6 +547,7 @@
       .dashboard-grid, .business-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .about-grid, .feature { grid-template-columns: 1fr; gap: 30px; }
       .feature-image { min-height: 330px; }
+      .footer-top { align-items: flex-start; flex-direction: column; }
     }
 
     @media (max-width: 600px) {
@@ -908,6 +909,12 @@
 
     .menu-item-name { flex: 1 1 auto; }
     .menu-items li { align-items: center; }
+    .menu-item-controls {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 8px;
+    }
     .menu-add-button {
       flex: 0 0 auto;
       min-height: 34px;
@@ -923,19 +930,38 @@
     }
     .menu-add-button:hover { background: rgba(224, 180, 93, .13); }
     .menu-add-button::before { content: "+"; margin-right: 5px; font-size: 1rem; }
-    .menu-heading .order-instruction {
+    .menu-quantity-control {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin: 14px 0 0;
-      padding: 9px 13px;
-      border: 1px solid rgba(224, 180, 93, .24);
+      gap: 9px;
+      min-height: 34px;
+      padding: 2px 5px;
+      border: 1px solid rgba(224, 180, 93, .4);
       border-radius: 999px;
-      color: var(--gold-light);
-      font-size: .84rem;
-      font-weight: 700;
+      background: rgba(224, 180, 93, .08);
     }
-    .menu-heading .order-instruction::before { content: "↓"; font-size: 1rem; }
+    .menu-quantity-control button {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(224, 180, 93, .15);
+      color: var(--gold-light);
+      font: inherit;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .menu-quantity-control button:hover { background: rgba(224, 180, 93, .28); }
+    .menu-quantity-control button:disabled { cursor: not-allowed; opacity: .45; }
+    .menu-quantity-value {
+      min-width: 1.1em;
+      color: var(--cream);
+      font-size: .9rem;
+      font-weight: 800;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
     .cart-shortcut {
       display: inline-flex;
       align-items: center;
@@ -1076,6 +1102,79 @@
 
     .gallery-disclaimer { margin: 18px 0 0; color: #b8b09e; font-size: .83rem; }
 
+    .events-section {
+      background:
+        radial-gradient(ellipse at 12% 10%, rgba(224, 180, 93, .08), transparent 38%),
+        #0d0d0a;
+    }
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .event-card {
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid rgba(224, 180, 93, .28);
+      border-radius: 20px;
+      background: linear-gradient(150deg, #19170f, #11110e);
+      box-shadow: 0 14px 38px rgba(0, 0, 0, .22);
+    }
+    .event-card-label {
+      color: var(--gold-light);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .event-card h3 {
+      margin: 12px 0;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 500;
+    }
+    .event-card p { color: #b8b09e; }
+    .event-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .event-actions .button { min-height: 44px; padding-inline: 17px; }
+    .faq-list { display: grid; gap: 12px; margin-top: 54px; }
+    .faq-list h3 {
+      margin: 0 0 4px;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      font-weight: 500;
+    }
+    .faq-item {
+      overflow: hidden;
+      border: 1px solid rgba(224, 180, 93, .24);
+      border-radius: 14px;
+      background: linear-gradient(145deg, #17160f, #11110e);
+    }
+    .faq-item summary {
+      display: flex;
+      min-height: 64px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 15px 20px;
+      color: var(--cream);
+      font-weight: 750;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "+";
+      flex: 0 0 auto;
+      color: var(--gold-light);
+      font-size: 1.5rem;
+      line-height: 1;
+      transition: transform .2s ease;
+    }
+    .faq-item[open] summary::after { content: "−"; }
+    .faq-item summary:focus-visible { outline: 2px solid var(--gold-light); outline-offset: -4px; }
+    .faq-answer { margin: 0; padding: 0 20px 18px; color: #b8b09e; }
+
     .contact-section {
       background: #0b0b09;
     }
@@ -1141,6 +1240,12 @@
       align-items: center;
       justify-content: space-between;
       gap: 24px;
+    }
+
+    .footer-top .brand-logo {
+      width: 76px;
+      height: 76px;
+      flex: 0 0 76px;
     }
 
     .footer-social {
@@ -1216,6 +1321,7 @@
       .nav-links { gap: 14px; font-size: .82rem; }
       .nav-cta { display: none; }
       .gallery-grid { grid-template-rows: 200px 200px; }
+      .events-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 760px) {
@@ -1290,6 +1396,7 @@
       .gallery-item:first-child { grid-column: span 2; grid-row: auto; }
       .gallery-item:nth-child(2) { grid-column: span 2; }
       .gallery-item:nth-child(3), .gallery-item:nth-child(4) { grid-column: span 1; }
+      .events-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -1305,7 +1412,7 @@
       .values { grid-template-columns: 1fr; }
       .menu-grid { grid-template-columns: 1fr; }
       .menu-items li { flex-wrap: wrap; }
-      .menu-add-button { margin-left: auto; }
+      .menu-item-controls { margin-left: auto; }
       .order-online { padding: 20px; }
       .menu-order-note { padding: 20px; }
       .menu-order-actions { width: 100%; }
@@ -1317,7 +1424,7 @@
       .family-card .social-links { display: grid; width: 100%; grid-template-columns: 1fr; }
       .family-card .social-links a { justify-content: space-between; }
       .contact-panel { padding: 24px; }
-      footer .brand-logo { width: 58px; height: 58px; }
+      footer .brand-logo { width: 68px; height: 68px; flex-basis: 68px; }
       .footer-top { align-items: flex-start; flex-direction: column; }
       .social-links { display: grid; grid-template-columns: 1fr; }
       .social-links a { justify-content: space-between; }
@@ -1366,6 +1473,8 @@
           <a href="#menu">Menu</a>
           <a href="#menu">Click to order</a>
           <a href="#gallery">Gallery</a>
+          <a href="#events">Events &amp; buffet</a>
+          <a href="#faqs">FAQs</a>
           <a href="#family">Join the family</a>
           <a href="#contact">Contact</a>
         </div>
@@ -1458,7 +1567,6 @@
             <span class="eyebrow">Made with care, shared with joy</span>
             <h2 id="menu-title" style="margin-top:18px;">Good food. <span class="gold">Warm hearts.</span></h2>
             <p>Choose anything you like below. Add each dish to your order, adjust quantities in your cart, and review your total.</p>
-            <p class="order-instruction">Click “Add to order” beside any menu item</p>
             <a class="cart-shortcut" href="#cart-panel" id="menu-cart-link">View your order (0 items)</a>
           </div>
         </div>
@@ -1653,6 +1761,68 @@
       </div>
     </section>
 
+    <section class="section events-section" id="events" aria-labelledby="events-title">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Bring everyone together</span>
+          <h2 id="events-title">Make room for <span class="gold">your occasion.</span></h2>
+          <p>Planning a big event or a gathering? Get in touch with ARLA to talk through what you have in mind.</p>
+        </div>
+        <div class="events-grid">
+          <article class="event-card">
+            <span class="event-card-label">Food for your event</span>
+            <h3>Big moments, shared over good food.</h3>
+            <p>Ask ARLA about preparing food for your event. Contact us to discuss your occasion and the details.</p>
+            <div class="event-actions">
+              <a class="button" href="tel:+12402438147">Call about event food <span aria-hidden="true">↗</span></a>
+              <a class="button button-outline" href="https://web.whatsapp.com/send?phone=12402438147" target="_blank" rel="noopener noreferrer">Message ARLA <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article class="event-card">
+            <span class="event-card-label">Gather at ARLA</span>
+            <h3>Make it a gathering to remember.</h3>
+            <p>Interested in booking the space for a gathering? Contact ARLA to talk about your plans and ask about availability.</p>
+            <div class="event-actions">
+              <a class="button" href="tel:+12402438147">Ask about booking <span aria-hidden="true">↗</span></a>
+              <a class="button button-outline" href="https://web.whatsapp.com/send?phone=12402438147" target="_blank" rel="noopener noreferrer">Message ARLA <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article class="event-card">
+            <span class="event-card-label">Buffet service</span>
+            <h3>Bring ARLA to the buffet table.</h3>
+            <p>Ask ARLA about buffet food for your event. Menu options, serving details, and pricing can be discussed for your occasion.</p>
+            <div class="event-actions">
+              <a class="button" href="tel:+12402438147">Ask about a buffet <span aria-hidden="true">↗</span></a>
+              <a class="button button-outline" href="https://web.whatsapp.com/send?phone=12402438147" target="_blank" rel="noopener noreferrer">Message ARLA <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        </div>
+        <section class="faq-list" id="faqs" aria-labelledby="faq-title">
+          <h3 id="faq-title">Frequently asked questions</h3>
+          <details class="faq-item">
+            <summary>How can I order from ARLA?</summary>
+            <p class="faq-answer">You can browse the menu and build a cart on this website. Online checkout is not active yet, so please call ARLA or message us on WhatsApp Web to place an order.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Where is pickup available?</summary>
+            <p class="faq-answer">Pickup is in Gaithersburg, Maryland. Contact ARLA directly for pickup details.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can ARLA prepare food or a buffet for my event?</summary>
+            <p class="faq-answer">Contact ARLA to discuss event food or buffet options. Menu, serving details, pricing, and availability are confirmed directly with ARLA.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I book ARLA for a gathering?</summary>
+            <p class="faq-answer">Get in touch with ARLA about your gathering and ask about the space and availability.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is delivery available?</summary>
+            <p class="faq-answer">Online delivery is not currently configured on this website. Please contact ARLA to ask about delivery before placing an order.</p>
+          </details>
+        </section>
+      </div>
+    </section>
+
     <section class="section family-section" id="family" aria-labelledby="family-title">
       <div class="container">
         <div class="family-card">
@@ -1729,6 +1899,8 @@
           <a href="#about">About</a>
           <a href="#menu">Menu</a>
           <a href="#gallery">Gallery</a>
+          <a href="#events">Events</a>
+          <a href="#faqs">FAQs</a>
           <a href="#family">Family</a>
           <a href="#contact">Contact</a>
         </div>
