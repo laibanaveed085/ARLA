@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080909">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <title>ARLA Staff Orders</title>
+  <link rel="stylesheet" href="staff.css">
+  <script type="module" src="staff.js"></script>
+</head>
+<body>
+  <header class="staff-header">
+    <a class="staff-brand" href="/" aria-label="ARLA home">
+      <img src="assets/arla-logo.jpg" alt="" width="56" height="56">
+      <span><strong>ARLA</strong><small>Staff order management</small></span>
+    </a>
+    <a class="home-link" href="/">View website</a>
+  </header>
+  <main class="staff-main">
+    <section class="staff-card" id="login-view" aria-labelledby="login-title">
+      <span class="eyebrow">Authorized staff only</span>
+      <h1 id="login-title">Staff sign in</h1>
+      <p>Use the staff account authorized for ARLA order management.</p>
+      <form id="login-form" class="staff-form">
+        <label for="staff-email">Email address
+          <input id="staff-email" type="email" name="email" autocomplete="username" required maxlength="254">
+        </label>
+        <label for="staff-password">Password
+          <input id="staff-password" type="password" name="password" autocomplete="current-password" required maxlength="200">
+        </label>
+        <button class="staff-button" type="submit">Sign in</button>
+      </form>
+      <p class="staff-message" id="login-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="staff-dashboard" id="dashboard-view" aria-labelledby="orders-title" hidden>
+      <div class="dashboard-heading">
+        <div>
+          <span class="eyebrow">Private order management</span>
+          <h1 id="orders-title">Incoming orders</h1>
+          <p id="staff-identity"></p>
+        </div>
+        <div class="dashboard-actions">
+          <button class="staff-button secondary-button" id="refresh-orders" type="button">Refresh</button>
+          <button class="staff-button secondary-button" id="sign-out" type="button">Sign out</button>
+        </div>
+      </div>
+      <p class="staff-message" id="orders-message" role="status" aria-live="polite"></p>
+      <div class="order-cards" id="staff-order-list"></div>
+    </section>
+  </main>
+</body>
+</html>
