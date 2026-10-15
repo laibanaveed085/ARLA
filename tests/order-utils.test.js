@@ -6,6 +6,7 @@ import {
   calculateTotals,
   getDeliveryZone,
   getPublicOrderConfig,
+  parseDeliveryFee,
   parseDeliveryZones,
 } from "../lib/order-utils.js";
 
@@ -51,6 +52,19 @@ test("rejects delivery zones with unverified cities, ZIPs, or invalid fees", () 
   assert.throws(() => parseDeliveryZones('[{"city":"Rockville","zipCodes":["1234"],"feeCents":0,"minimumCents":0}]'));
   assert.throws(() => parseDeliveryZones('[{"city":"Rockville","zipCodes":["20850"],"feeCents":-1,"minimumCents":0}]'));
   assert.throws(() => parseDeliveryZones('[{"city":"Rockville","zipCodes":["20850"],"feeCents":0,"minimumCents":0},{"city":"Rockville","zipCodes":["20850"],"feeCents":100,"minimumCents":0}]'));
+});
+
+test("uses the requested $2.99 delivery fee by default and supports zone overrides", () => {
+  assert.equal(parseDeliveryFee(undefined), 299);
+  assert.equal(parseDeliveryFee("299"), 299);
+  assert.throws(() => parseDeliveryFee("-1"));
+  assert.throws(() => parseDeliveryFee("2.99"));
+
+  const config = getPublicOrderConfig({
+    ARLA_DELIVERY_ZONES: '[{"city":"Gaithersburg","zipCodes":["20878"],"minimumCents":0}]',
+  });
+  assert.equal(config.deliveryFeeCents, 299);
+  assert.equal(config.deliveryZones[0].feeCents, 299);
 });
 
 test("does not enable checkout until backend, staff, and tax configuration exist", () => {
