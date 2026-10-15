@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080909">
-  <meta name="description" content="ARLA — One Vision. Multiple Possibilities. Endless Impact. Discover our vision across food, business, property, logistics, and investment.">
+  <meta name="description" content="Discover ARLA's café vision: warm hospitality, thoughtful details, and a welcoming place to slow down.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://images.unsplash.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
-  <title>ARLA — One Vision. Endless Impact.</title>
+  <title>ARLA Café — Make Room for a Slower Moment</title>
 
   <style>
     :root {
@@ -555,8 +555,9 @@
       .logo { width: 40px; height: 40px; }
       .brand-name { font-size: 1.1rem; }
       .brand-caption { font-size: .55rem; }
-      .nav-links { gap: 12px; font-size: .78rem; }
-      .nav-links a:nth-child(2) { display: none; }
+      .nav-links { gap: 10px; font-size: .75rem; }
+      .nav-links a:nth-child(2),
+      .nav-links a:nth-child(3) { display: none; }
       .hero { padding: 80px 0 60px; }
       .hero-strip { grid-template-columns: 1fr; }
       .hero-stat { padding: 17px; }
@@ -577,127 +578,637 @@
         animation-duration: .01ms !important;
       }
     }
+
+    :root {
+      --bg: #f4f0e8;
+      --panel: #fffdf8;
+      --panel-light: #eee7da;
+      --gold: #bd995d;
+      --gold-light: #e0c48e;
+      --text: #211d18;
+      --muted: #726b60;
+      --border: rgba(63, 48, 29, .13);
+      --radius: 22px;
+      --width: 1200px;
+      --cream: #f7f3eb;
+      --espresso: #171511;
+    }
+
+    html { scroll-padding-top: 96px; }
+
+    body {
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .topbar {
+      border-bottom-color: rgba(33, 29, 24, .1);
+      background: rgba(247, 243, 235, .96);
+      color: var(--text);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav { min-height: 78px; }
+    .brand-logo {
+      display: block;
+      width: 68px;
+      height: 68px;
+      flex-shrink: 0;
+      border: 1px solid rgba(189, 153, 93, .55);
+      border-radius: 50%;
+      background: var(--espresso);
+      object-fit: cover;
+      box-shadow: 0 5px 16px rgba(30, 22, 12, .12);
+    }
+
+    .brand-name { color: var(--espresso); }
+    .brand-caption { color: #766d5f; }
+    .nav-links { gap: clamp(16px, 2.3vw, 32px); color: #494238; }
+    .nav-links a, .footer-links a { transition: color .2s ease; }
+    .nav-links a:hover { color: #9a7435; }
+
+    .button {
+      min-height: 50px;
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #20190f;
+      box-shadow: 0 8px 22px rgba(91, 66, 29, .13);
+      transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      background: #d0ad70;
+      box-shadow: 0 12px 26px rgba(91, 66, 29, .2);
+    }
+
+    .button-outline {
+      border-color: rgba(247, 243, 235, .44);
+      background: transparent;
+      color: var(--cream);
+      box-shadow: none;
+    }
+
+    .button-outline:hover {
+      border-color: var(--gold-light);
+      background: rgba(255, 255, 255, .07);
+      color: var(--cream);
+      box-shadow: none;
+    }
+
+    .mobile-nav { display: none; }
+
+    .skip-link {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 50;
+      padding: 10px 14px;
+      transform: translateY(-160%);
+      border-radius: 8px;
+      background: var(--cream);
+      color: var(--espresso);
+      font-weight: 700;
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .hero {
+      overflow: hidden;
+      padding: 62px 0 76px;
+      background:
+        radial-gradient(ellipse at 8% 0%, rgba(189, 153, 93, .12), transparent 38%),
+        var(--espresso);
+      color: var(--cream);
+    }
+
+    .hero::before { display: none; }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.02fr .98fr;
+      align-items: center;
+      gap: clamp(36px, 6vw, 82px);
+    }
+
+    .hero-copy { animation: rise-in .7s ease both; }
+    .hero .eyebrow { color: var(--gold-light); }
+
+    .hero h1 {
+      max-width: 660px;
+      margin: 22px 0;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3.2rem, 6vw, 5.7rem);
+      font-weight: 500;
+      letter-spacing: -.055em;
+      line-height: .99;
+    }
+
+    .hero h1 em {
+      color: var(--gold-light);
+      font-weight: 400;
+    }
+
+    .hero-description {
+      max-width: 510px;
+      margin-bottom: 28px;
+      color: rgba(247, 243, 235, .76);
+      font-size: clamp(1rem, 1.5vw, 1.13rem);
+      line-height: 1.8;
+    }
+
+    .hero-actions { gap: 14px; margin: 0; }
+
+    .hero-image-wrap {
+      position: relative;
+      min-width: 0;
+      animation: rise-in .85s .08s ease both;
+    }
+
+    .hero-image {
+      width: 100%;
+      height: clamp(380px, 48vw, 570px);
+      border: 1px solid rgba(224, 196, 142, .28);
+      border-radius: 46% 46% 20px 20px;
+      object-fit: cover;
+      object-position: center;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, .32);
+    }
+
+    .image-note {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      padding: 11px 16px;
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 999px;
+      background: rgba(23, 21, 17, .72);
+      color: var(--cream);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      backdrop-filter: blur(10px);
+    }
+
+    .section { padding: clamp(76px, 10vw, 124px) 0; }
+
+    .about-grid {
+      grid-template-columns: .85fr 1.15fr;
+      gap: clamp(35px, 7vw, 90px);
+      align-items: start;
+    }
+
+    .section .eyebrow { color: #9a7435; }
+
+    .section h2 {
+      color: var(--espresso);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 4.8vw, 4rem);
+      font-weight: 500;
+      letter-spacing: -.045em;
+      line-height: 1.04;
+    }
+
+    .section h2 .gold { color: #a67f42; }
+    .about-copy p { color: #625b50; font-size: 1.04rem; line-height: 1.85; }
+    .about-copy p:first-child { color: #393329; font-size: 1.18rem; }
+
+    .values {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .value-card {
+      border-color: rgba(63, 48, 29, .12);
+      background: rgba(255, 253, 248, .72);
+      box-shadow: 0 8px 26px rgba(48, 37, 21, .035);
+    }
+
+    .value-card span { color: #9a7435; }
+    .value-card h3 { color: var(--espresso); }
+    .value-card p { color: #726b60; }
+
+    .menu-section {
+      background:
+        radial-gradient(ellipse at 84% 20%, rgba(189, 153, 93, .12), transparent 38%),
+        var(--espresso);
+      color: var(--cream);
+    }
+
+    .menu-layout {
+      display: grid;
+      grid-template-columns: 1fr .9fr;
+      align-items: center;
+      gap: clamp(35px, 7vw, 90px);
+    }
+
+    .menu-section .eyebrow { color: var(--gold-light); }
+    .menu-section h2 { color: var(--cream); }
+    .menu-section h2 .gold { color: var(--gold-light); }
+    .menu-section .menu-copy > p { max-width: 520px; color: rgba(247, 243, 235, .74); }
+
+    .menu-card {
+      position: relative;
+      display: grid;
+      min-height: 350px;
+      place-content: center;
+      padding: 42px;
+      border: 1px solid rgba(224, 196, 142, .46);
+      border-radius: 8px;
+      outline: 1px solid rgba(224, 196, 142, .18);
+      outline-offset: -11px;
+      background:
+        linear-gradient(0deg, rgba(23, 21, 17, .76), rgba(23, 21, 17, .48)),
+        url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80") center / cover,
+        #343027;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, .25);
+    }
+
+    .menu-card-label {
+      margin-bottom: 24px;
+      color: var(--gold-light);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .menu-card h3 {
+      margin: 0 0 12px;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 3vw, 2.7rem);
+      font-weight: 400;
+    }
+
+    .menu-card p {
+      max-width: 300px;
+      margin: 0 auto;
+      color: rgba(247, 243, 235, .8);
+      font-size: .9rem;
+    }
+
+    .gallery-section { background: #eee8dc; }
+    .gallery-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .gallery-heading .section-heading { max-width: 660px; margin: 0; }
+    .gallery-heading p { max-width: 350px; margin: 0 0 8px; color: var(--muted); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr 1fr;
+      grid-template-rows: 230px 230px;
+      gap: 16px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      margin: 0;
+      border-radius: 18px;
+      background: #d8d0c1;
+      box-shadow: 0 12px 28px rgba(50, 38, 23, .11);
+    }
+
+    .gallery-item:first-child { grid-row: span 2; }
+    .gallery-item:nth-child(2) { grid-column: span 2; }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .5s ease;
+    }
+
+    .gallery-item:hover img { transform: scale(1.035); }
+    .gallery-item figcaption {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      left: 12px;
+      width: fit-content;
+      max-width: calc(100% - 24px);
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 999px;
+      background: rgba(23, 21, 17, .7);
+      color: var(--cream);
+      font-size: .75rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .gallery-disclaimer { margin: 18px 0 0; color: #726b60; font-size: .83rem; }
+
+    .contact-section {
+      background: var(--cream);
+    }
+
+    .contact-section .section-heading { max-width: 720px; }
+    .contact-section .section-heading p { color: var(--muted); }
+    .contact-grid { grid-template-columns: 1fr 1fr; gap: 18px; }
+
+    .contact-panel {
+      border-color: rgba(63, 48, 29, .13);
+      background: #fffdf8;
+      box-shadow: 0 14px 40px rgba(48, 37, 21, .055);
+    }
+
+    .contact-panel h3 { color: var(--espresso); }
+    .contact-panel p { color: #726b60; }
+    .contact-item { border-bottom-color: rgba(63, 48, 29, .1); }
+    .contact-item strong { color: #8e6c37; }
+    .contact-item span { color: #726b60; }
+
+    footer {
+      padding: 48px 0 28px;
+      border-top: 1px solid rgba(247, 243, 235, .12);
+      background: var(--espresso);
+      color: var(--cream);
+    }
+
+    .footer-layout { display: grid; gap: 28px; }
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .footer-social {
+      padding: 24px 0;
+      border-top: 1px solid rgba(247, 243, 235, .12);
+      border-bottom: 1px solid rgba(247, 243, 235, .12);
+    }
+
+    .footer-social h2 {
+      margin: 0 0 16px;
+      color: var(--gold-light);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.45rem;
+      font-weight: 400;
+      letter-spacing: -.02em;
+    }
+
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      gap: 16px;
+      padding: 0 18px;
+      border: 1px solid rgba(224, 196, 142, .35);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .045);
+      color: var(--cream);
+      font-size: .94rem;
+      font-weight: 650;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold-light);
+      background: rgba(224, 196, 142, .12);
+      color: var(--gold-light);
+    }
+
+    .social-links a:focus-visible {
+      outline-color: var(--gold-light);
+      outline-offset: 4px;
+    }
+
+    .social-arrow { color: var(--gold-light); font-size: 1.1rem; }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    footer .brand-name { color: var(--cream); }
+    footer .brand-caption, footer .footer-bottom p, .footer-links { color: rgba(247, 243, 235, .62); }
+    .footer-links a:hover { color: var(--gold-light); }
+
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .hero-layout { gap: 34px; }
+      .hero h1 { font-size: clamp(3rem, 6.5vw, 4.5rem); }
+      .nav-links { gap: 14px; font-size: .82rem; }
+      .nav-cta { display: none; }
+      .gallery-grid { grid-template-rows: 200px 200px; }
+    }
+
+    @media (max-width: 760px) {
+      html { scroll-padding-top: 80px; }
+      .nav { min-height: 70px; }
+      .brand-logo { width: 54px; height: 54px; }
+      .nav-links { display: none; }
+      .mobile-nav { position: relative; display: block; margin-left: auto; }
+
+      .mobile-nav summary {
+        display: flex;
+        min-height: 44px;
+        align-items: center;
+        gap: 9px;
+        padding: 0 13px;
+        border: 1px solid rgba(63, 48, 29, .18);
+        border-radius: 999px;
+        color: var(--espresso);
+        cursor: pointer;
+        font-size: .88rem;
+        font-weight: 650;
+        list-style: none;
+      }
+
+      .mobile-nav summary::-webkit-details-marker { display: none; }
+      .mobile-nav summary::marker { content: ""; }
+      .mobile-nav summary:focus-visible {
+        outline: 2px solid #9a7435;
+        outline-offset: 4px;
+      }
+      .menu-symbol { color: #9a7435; font-size: 1.1rem; line-height: 1; }
+
+      .mobile-nav-panel {
+        position: absolute;
+        top: calc(100% + 12px);
+        right: 0;
+        z-index: 30;
+        display: grid;
+        width: min(86vw, 320px);
+        padding: 8px;
+        border: 1px solid rgba(63, 48, 29, .14);
+        border-radius: 18px;
+        background: #fffdf8;
+        box-shadow: 0 20px 48px rgba(31, 25, 16, .2);
+      }
+
+      .mobile-nav-panel a {
+        padding: 13px 14px;
+        border-radius: 11px;
+        color: var(--espresso);
+        font-size: .95rem;
+      }
+
+      .mobile-nav-panel a:hover,
+      .mobile-nav-panel a:focus-visible { background: #f1eadc; color: #825f2c; }
+
+      .hero { padding: 56px 0 64px; }
+      .hero-layout, .about-grid, .menu-layout { grid-template-columns: 1fr; }
+      .hero-layout { gap: 35px; }
+      .hero h1 { max-width: 590px; font-size: clamp(3.15rem, 11vw, 5rem); }
+      .hero-image { height: min(112vw, 490px); border-radius: 42% 42% 18px 18px; }
+      .about-grid, .menu-layout { gap: 28px; }
+      .values { grid-template-columns: 1fr 1fr; }
+      .menu-card { min-height: 320px; }
+      .gallery-heading { display: block; }
+      .gallery-heading p { margin-top: 18px; }
+      .gallery-grid { grid-template-rows: 260px 190px 190px; }
+      .gallery-item:first-child { grid-column: span 2; grid-row: auto; }
+      .gallery-item:nth-child(2) { grid-column: span 2; }
+      .gallery-item:nth-child(3), .gallery-item:nth-child(4) { grid-column: span 1; }
+    }
+
+    @media (max-width: 480px) {
+      .container { width: min(100% - 32px, var(--width)); }
+      .brand { gap: 9px; }
+      .brand-name { font-size: 1.05rem; }
+      .brand-caption { font-size: .5rem; letter-spacing: .1em; }
+      .hero { padding-top: 44px; }
+      .hero h1 { font-size: clamp(2.9rem, 12vw, 4rem); }
+      .hero-actions { align-items: stretch; flex-direction: column; }
+      .hero-actions .button { width: 100%; }
+      .image-note { right: 10px; bottom: 10px; font-size: .68rem; }
+      .values { grid-template-columns: 1fr; }
+      .menu-card { min-height: 290px; padding: 30px; }
+      .gallery-grid { grid-template-rows: 235px 170px 170px; gap: 10px; }
+      .gallery-item { border-radius: 14px; }
+      .gallery-item figcaption { font-size: .68rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-panel { padding: 24px; }
+      footer .brand-logo { width: 58px; height: 58px; }
+      .footer-top { align-items: flex-start; flex-direction: column; }
+      .social-links { display: grid; grid-template-columns: 1fr; }
+      .social-links a { justify-content: space-between; }
+      .footer-bottom { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="topbar">
     <nav class="nav container" aria-label="Main navigation">
       <a class="brand" href="#home" aria-label="ARLA home">
-        <!-- Built-in ARLA logo mark. Replace this block with your official logo image if available. -->
-        <span class="logo" aria-hidden="true">A</span>
+        <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
         <span>
           <span class="brand-name">ARLA</span>
-          <span class="brand-caption">One vision. Endless impact.</span>
+          <span class="brand-caption">Café · hospitality · moments</span>
         </span>
       </a>
 
       <div class="nav-links">
+        <a href="#home">Home</a>
         <a href="#about">About</a>
-        <a href="#businesses">Our Businesses</a>
-        <a href="#food">Food &amp; Beverage</a>
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
       </div>
 
-      <a class="button nav-cta" href="#contact">Connect with ARLA <span aria-hidden="true">↗</span></a>
+      <details class="mobile-nav">
+        <summary aria-label="Toggle navigation menu">
+          <span>Menu</span><span class="menu-symbol" aria-hidden="true">☰</span>
+        </summary>
+        <div class="mobile-nav-panel">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#menu">Menu</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </details>
+
+      <a class="button nav-cta" href="#menu">Explore the menu <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="hero" id="home">
-      <div class="container hero-content">
-        <span class="eyebrow">A vision built for tomorrow</span>
-        <h1>One Vision.<br><span class="gold">Multiple Possibilities.</span><br>Endless Impact.</h1>
-        <p class="hero-description">
-          ARLA is a forward-looking brand built around opportunity, thoughtful
-          growth, and meaningful experiences. We bring ideas together across
-          industries with a focus on quality, trust, and long-term vision.
+      <div class="container hero-layout">
+        <div class="hero-copy">
+          <span class="eyebrow">A café vision by ARLA</span>
+          <h1>Make room for <em>a slower moment.</em></h1>
+          <p class="hero-description">
+            A welcoming café concept shaped around warm hospitality, thoughtful
+            details, and the everyday moments worth savoring.
         </p>
 
         <div class="hero-actions">
-          <a class="button" href="#businesses">Explore Our Vision <span aria-hidden="true">→</span></a>
-          <a class="button button-outline" href="#about">Discover ARLA</a>
+            <a class="button" href="#menu">Discover the menu <span aria-hidden="true">→</span></a>
+            <a class="button button-outline" href="#about">Our approach</a>
+          </div>
         </div>
 
-        <div class="hero-strip" aria-label="ARLA brand principles">
-          <div class="hero-stat">
-            <strong>One Vision</strong>
-            <span>A clear direction for the future</span>
-          </div>
-          <div class="hero-stat">
-            <strong>Many Possibilities</strong>
-            <span>Ideas across different industries</span>
-          </div>
-          <div class="hero-stat">
-            <strong>Lasting Impact</strong>
-            <span>Growth with purpose and care</span>
-          </div>
+        <div class="hero-image-wrap">
+          <img
+            class="hero-image"
+            src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&amp;fit=crop&amp;w=1200&amp;q=85"
+            alt="Sunlit café interior with warm wood and a welcoming atmosphere"
+            width="1200"
+            height="1500"
+            fetchpriority="high"
+            decoding="async">
+          <span class="image-note">A little space to slow down</span>
         </div>
       </div>
     </section>
 
-    <section class="section container" aria-labelledby="dashboard-title">
-      <div class="dashboard">
-        <div class="dashboard-top">
-          <div>
-            <span class="eyebrow">The ARLA overview</span>
-            <h3 id="dashboard-title" style="margin-top:12px;">A broader vision. A smarter approach.</h3>
-          </div>
-          <span class="status">Our direction</span>
-        </div>
-
-        <div class="dashboard-grid">
-          <a class="dashboard-card" href="#food">
-            <span class="card-icon" aria-hidden="true">✦</span>
-            <h3>Food &amp; Beverage</h3>
-            <p>Food, hospitality, and memorable experiences.</p>
-          </a>
-          <a class="dashboard-card" href="#businesses">
-            <span class="card-icon" aria-hidden="true">↗</span>
-            <h3>Business Solutions</h3>
-            <p>Practical ideas that support business growth.</p>
-          </a>
-          <a class="dashboard-card" href="#businesses">
-            <span class="card-icon" aria-hidden="true">⌂</span>
-            <h3>Real Estate</h3>
-            <p>A long-term perspective on places and property.</p>
-          </a>
-          <a class="dashboard-card" href="#businesses">
-            <span class="card-icon" aria-hidden="true">⇄</span>
-            <h3>Logistics</h3>
-            <p>Connecting needs, services, and opportunities.</p>
-          </a>
-          <a class="dashboard-card" href="#businesses">
-            <span class="card-icon" aria-hidden="true">◇</span>
-            <h3>Investments</h3>
-            <p>Exploring opportunities with care and purpose.</p>
-          </a>
-          <a class="dashboard-card" href="#contact">
-            <span class="card-icon" aria-hidden="true">◎</span>
-            <h3>Future Ventures</h3>
-            <p>Open to ideas that align with the ARLA vision.</p>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container" id="about">
+    <section class="section container" id="about" aria-labelledby="about-title">
       <div class="about-grid">
         <div>
-          <span class="eyebrow">Who we are</span>
-          <h2 style="margin-top:18px;">Built on vision.<br><span class="gold">Driven by purpose.</span></h2>
+          <span class="eyebrow">A warm welcome, thoughtfully imagined</span>
+          <h2 id="about-title" style="margin-top:18px;">Good things begin with <span class="gold">a little care.</span></h2>
         </div>
 
         <div class="about-copy">
           <p>
-            ARLA represents a bigger idea: creating a brand that can grow,
-            adapt, and bring value to different areas of everyday life.
-            Our vision combines entrepreneurship with a commitment to
-            quality, thoughtful decisions, and lasting relationships.
+            ARLA's café vision is rooted in a simple idea: make space for good
+            conversation, thoughtful details, and the comfort of slowing down.
+            We want every part of the experience to feel warm, considered, and
+            genuinely welcoming.
           </p>
           <p>
-            From food and hospitality to future business opportunities,
-            every direction begins with a simple principle: build with
-            intention and keep the bigger picture in mind.
+            Quality, trust, and care guide the ARLA approach to hospitality.
+            Confirmed details for a visit will be added here once available.
           </p>
 
           <div class="values">
@@ -726,133 +1237,117 @@
       </div>
     </section>
 
-    <section class="section business-section" id="businesses">
+    <section class="section menu-section" id="menu" aria-labelledby="menu-title">
+      <div class="container menu-layout">
+        <div class="menu-copy">
+          <span class="eyebrow">Made with care, shared with joy</span>
+          <h2 id="menu-title" style="margin-top:18px;">Something lovely is <span class="gold">in the making.</span></h2>
+          <p>
+            The menu hasn't been confirmed for publication yet. Once available,
+            the dishes, ingredients, dietary details, and prices will be shared here.
+          </p>
+          <a class="button" href="#contact">Ask about ARLA <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="menu-card">
+          <span class="menu-card-label">ARLA Café · Menu preview</span>
+          <h3>A little more<br>to look forward to.</h3>
+          <p>Confirmed menu details will be shared here once available.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gallery-section" id="gallery" aria-labelledby="gallery-title">
+      <div class="container">
+        <div class="gallery-heading">
+          <div class="section-heading">
+            <span class="eyebrow">A feeling worth sharing</span>
+            <h2 id="gallery-title" style="margin-top:18px;">A little glimpse of <span class="gold">the atmosphere.</span></h2>
+          </div>
+          <p>Warm light, thoughtful details, and spaces that invite you to stay awhile.</p>
+        </div>
+
+        <div class="gallery-grid">
+          <figure class="gallery-item">
+            <img
+              src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&amp;fit=crop&amp;w=900&amp;q=80"
+              alt="A cozy café interior with warm lighting and wooden furnishings"
+              width="900"
+              height="1100"
+              loading="lazy"
+              decoding="async">
+            <figcaption>Warm, welcoming spaces</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img
+              src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="An inviting restaurant interior set for a relaxed meal"
+              width="1200"
+              height="700"
+              loading="lazy"
+              decoding="async">
+            <figcaption>Room to gather</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img
+              src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&amp;fit=crop&amp;w=800&amp;q=80"
+              alt="A freshly prepared cup of coffee"
+              width="800"
+              height="700"
+              loading="lazy"
+              decoding="async">
+            <figcaption>Small details, thoughtfully done</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img
+              src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&amp;fit=crop&amp;w=800&amp;q=80"
+              alt="A cup of coffee ready to be enjoyed"
+              width="800"
+              height="700"
+              loading="lazy"
+              decoding="async">
+            <figcaption>A moment to pause</figcaption>
+          </figure>
+        </div>
+        <p class="gallery-disclaimer">Gallery images are café inspiration and are not photographs of ARLA's location.</p>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact" aria-labelledby="contact-title">
       <div class="container">
         <div class="section-heading">
-          <span class="eyebrow">Our areas of interest</span>
-          <h2 style="margin-top:18px;">Different industries.<br><span class="gold">One connected vision.</span></h2>
+          <span class="eyebrow">Connect with ARLA</span>
+          <h2 id="contact-title" style="margin-top:18px;">Let's make room for <span class="gold">what's next.</span></h2>
           <p>
-            ARLA's broader vision spans several areas of opportunity.
-            These are areas of interest, not a claim that every service
-            is currently available.
+            ARLA's café details are still being confirmed. We look forward to
+            sharing the practical information as it becomes available.
           </p>
         </div>
 
-        <div class="business-grid">
-          <article class="business-card">
-            <span class="number">01 — HOSPITALITY</span>
-            <h3>Food &amp; Beverage</h3>
-            <p>Food, drinks, hospitality, and welcoming experiences inspired by flavor and culture.</p>
-          </article>
-
-          <article class="business-card">
-            <span class="number">02 — MOVEMENT</span>
-            <h3>Logistics &amp; Transport</h3>
-            <p>Exploring ways to connect people, products, and business needs efficiently.</p>
-          </article>
-
-          <article class="business-card">
-            <span class="number">03 — PROPERTY</span>
-            <h3>Real Estate</h3>
-            <p>A future-focused interest in property, spaces, and long-term opportunities.</p>
-          </article>
-
-          <article class="business-card">
-            <span class="number">04 — OPPORTUNITY</span>
-            <h3>Investments</h3>
-            <p>Evaluating potential opportunities with thoughtful planning and a long-term view.</p>
-          </article>
-
-          <article class="business-card">
-            <span class="number">05 — SOLUTIONS</span>
-            <h3>Business Solutions</h3>
-            <p>Ideas, services, and practical approaches that help businesses move forward.</p>
-          </article>
-
-          <article class="business-card">
-            <span class="number">06 — THE FUTURE</span>
-            <h3>New Ventures</h3>
-            <p>Making room for new ideas that fit the ARLA values and broader vision.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container" id="food">
-      <div class="feature">
-        <div class="feature-image" role="img" aria-label="A richly prepared rice dish representing food and hospitality"></div>
-
-        <div class="feature-copy">
-          <span class="eyebrow">Food &amp; Beverage</span>
-          <h2 style="margin-top:18px;">Made for moments<br><span class="gold">worth sharing.</span></h2>
-          <p>
-            Food can bring people together, carry tradition, and turn
-            an ordinary day into something memorable. ARLA's food and
-            beverage vision is inspired by hospitality, rich flavors,
-            and the warmth of sharing a meal.
-          </p>
-
-          <ul class="feature-list">
-            <li><span class="check" aria-hidden="true">✓</span><span>Hospitality with a welcoming spirit</span></li>
-            <li><span class="check" aria-hidden="true">✓</span><span>Inspired by Pakistani flavors and food culture</span></li>
-            <li><span class="check" aria-hidden="true">✓</span><span>A focus on quality, care, and the guest experience</span></li>
-          </ul>
-
-          <a class="button button-outline" href="#contact">Ask About ARLA <span aria-hidden="true">→</span></a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container">
-      <div class="vision-banner">
-        <span class="eyebrow">The bigger picture</span>
-        <h2 style="margin-top:18px;">Good ideas deserve <span class="gold">room to grow.</span></h2>
-        <p>
-          We believe the strongest future is built with purpose, patience,
-          and the courage to explore possibilities. ARLA is a vision that
-          continues to develop.
-        </p>
-        <a class="button" href="#contact">Start a Conversation <span aria-hidden="true">↗</span></a>
-      </div>
-    </section>
-
-    <section class="section container" id="contact">
-      <div class="section-heading">
-        <span class="eyebrow">Connect with ARLA</span>
-        <h2 style="margin-top:18px;">Let's talk about <span class="gold">what's next.</span></h2>
-        <p>
-          Interested in ARLA, a potential partnership, or a future
-          opportunity? We welcome conversations built around shared goals.
-        </p>
-      </div>
-
-      <div class="contact-grid">
-        <div class="contact-panel">
-          <span class="eyebrow">Our approach</span>
-          <h3 style="margin-top:18px;">Every opportunity starts with a conversation.</h3>
-          <p>
-            We value thoughtful ideas, clear communication, and relationships
-            that create room for meaningful progress.
-          </p>
-        </div>
-
-        <div class="contact-panel">
-          <h3>Business inquiries</h3>
-          <p>
-            Official contact details will be published here once confirmed.
-            No personal contact information is displayed on this page.
-          </p>
-          <div class="contact-item">
-            <strong>Partnerships</strong>
-            <span>For collaboration and business opportunities</span>
+        <div class="contact-grid">
+          <div class="contact-panel">
+            <span class="eyebrow">Our approach</span>
+            <h3 style="margin-top:18px;">Every good experience starts with care.</h3>
+            <p>
+              We value thoughtful ideas, clear communication, and the details
+              that help people feel welcome.
+            </p>
           </div>
-          <div class="contact-item">
-            <strong>Food &amp; Beverage</strong>
-            <span>For future hospitality and food-related inquiries</span>
-          </div>
-          <div class="contact-item">
-            <strong>Location</strong>
-            <span>Montgomery County, Maryland, USA</span>
+
+          <div class="contact-panel">
+            <h3>Visit &amp; inquiries</h3>
+            <p>
+              Official contact details will be published here once confirmed.
+              No phone number, email, or opening hours have been provided yet.
+            </p>
+            <div class="contact-item">
+              <strong>Location</strong>
+              <span>Montgomery County, Maryland, USA</span>
+            </div>
+            <div class="contact-item">
+              <strong>Food &amp; Beverage</strong>
+              <span>For future hospitality and food-related inquiries</span>
+            </div>
           </div>
         </div>
       </div>
@@ -860,24 +1355,44 @@
   </main>
 
   <footer>
-    <div class="container footer-inner">
-      <a class="brand" href="#home" aria-label="ARLA home">
-        <span class="logo" aria-hidden="true">A</span>
-        <span>
-          <span class="brand-name">ARLA</span>
-          <span class="brand-caption">One vision. Endless impact.</span>
-        </span>
-      </a>
+    <div class="container footer-layout">
+      <div class="footer-top">
+        <a class="brand" href="#home" aria-label="ARLA home">
+          <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+          <span>
+            <span class="brand-name">ARLA</span>
+            <span class="brand-caption">Café · hospitality · moments</span>
+          </span>
+        </a>
 
-      <p>© <span id="year">2026</span> ARLA. All rights reserved.</p>
+        <div class="footer-links" aria-label="Footer navigation">
+          <a href="#about">About</a>
+          <a href="#menu">Menu</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
 
-      <div class="footer-links">
-        <a href="#about">About</a>
-        <a href="#businesses">Businesses</a>
-        <a href="#contact">Contact</a>
+      <section class="footer-social" aria-labelledby="follow-arla">
+        <h2 id="follow-arla">Follow ARLA</h2>
+        <div class="social-links">
+          <a href="https://www.tiktok.com/t/ZPLSXjfSa" target="_blank" rel="noopener noreferrer">
+            TikTok <span class="social-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href="https://www.instagram.com/thearla_house?mdxt=MXVuZGlqY3VodGhuNg%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener noreferrer">
+            Instagram <span class="social-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href="https://www.facebook.com/share/r/19xJc1R864/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
+            Facebook <span class="social-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <div class="footer-bottom">
+        <p>© 2026 ARLA. All rights reserved.</p>
       </div>
     </div>
   </footer>
+  <script src="mobile-nav.js" defer></script>
 </body>
 </html>
-
