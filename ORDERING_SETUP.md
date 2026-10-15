@@ -23,7 +23,7 @@ The customer-facing menu descriptions were not provided, so the ordering UI iden
    - `ARLA_DELIVERY_ZONES`, a JSON array. Each entry has `city`, `zipCodes`, `feeCents`, and `minimumCents`; for example, use a structure such as `[{"city":"Gaithersburg","zipCodes":["REPLACE_WITH_VERIFIED_ZIP"],"feeCents":0,"minimumCents":0}]` only after replacing the placeholder and setting ARLA's actual fee/minimum. Fees and minimums are integer cents. Supported city names are Germantown, Rockville, and Gaithersburg. An empty array leaves delivery unavailable.
 4. Deploy the project through the existing Vercel integration. Verify a real test order appears in `/staff.html`, update its status, then remove the test order before advertising online ordering.
 
-Checkout remains disabled until the database, staff access, tax rate, and taxability setting are all configured. The existing phone and WhatsApp order links remain available during setup.
+Checkout remains disabled until the database, staff access, tax rate, and taxability setting are all configured. The existing phone and browser-based WhatsApp Web order links remain available during setup.
 
 ## Delivery coverage
 
