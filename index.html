@@ -1,0 +1,86 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARLA | One Vision. Multiple Possibilities.</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: #f7f3e9;
+      line-height: 1.7;
+    }
+    header {
+      padding: 24px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #302817;
+    }
+    .logo { color: #d8b66a; font-size: 30px; font-weight: bold; letter-spacing: 5px; }
+    nav a { color: #eee; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .hero { text-align: center; padding: 100px 20px 90px; }
+    .hero h1 { font-size: clamp(42px, 8vw, 76px); color: #d8b66a; letter-spacing: 5px; }
+    .hero h2 { font-size: clamp(17px, 3vw, 25px); margin: 15px 0; font-weight: normal; }
+    .hero p { color: #bcb8ad; max-width: 650px; margin: 18px auto; }
+    .button {
+      display: inline-block; margin-top: 20px; padding: 12px 25px;
+      border: 1px solid #d8b66a; color: #d8b66a; text-decoration: none;
+    }
+    section { padding: 65px 8%; }
+    .section-title { color: #d8b66a; text-align: center; font-size: 30px; margin-bottom: 25px; }
+    .intro { max-width: 750px; margin: auto; text-align: center; color: #c5c1b8; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 35px; }
+    .card { border: 1px solid #393125; padding: 25px; background: #121212; }
+    .card h3 { color: #d8b66a; margin-bottom: 10px; }
+    .card p { color: #c5c1b8; font-size: 15px; }
+    .food { background: #11100d; }
+    .contact { text-align: center; }
+    footer { text-align: center; border-top: 1px solid #302817; padding: 25px; color: #999; font-size: 13px; }
+    @media (max-width: 650px) {
+      header { flex-direction: column; gap: 12px; }
+      nav a { margin: 0 7px; }
+      .hero { padding-top: 65px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">ARLA</div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#business">Our Businesses</a>
+      <a href="#food">Food & Beverage</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>THE ARLA GROUP</h1>
+      <h2>ONE VISION. MULTIPLE POSSIBILITIES. ENDLESS IMPACT.</h2>
+      <p>A growing vision built around quality, opportunity, and meaningful service across multiple industries.</p>
+      <a class="button" href="#business">DISCOVER ARLA</a>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">Our Vision</h2>
+      <p class="intro">ARLA is a business vision focused on bringing different opportunities together under one brand. Our goal is to build trusted services, create lasting relationships, and grow with purpose.</p>
+    </section>
+
+    <section id="business">
+      <h2 class="section-title">Our Businesses</h2>
+      <div class="cards">
+        <div class="card"><h3>Food & Beverage</h3><p>Food, catering, and hospitality inspired by flavor, quality, and community.</p></div>
+        <div class="card"><h3>Logistics & Transport</h3><p>Building opportunities in transportation and dependable logistics services.</p></div>
+        <div class="card"><h3>Real Estate</h3><p>Exploring property opportunities with a long-term vision.</p></div>
+        <div class="card"><h3>Investments</h3><p>Focused on responsible growth and future possibilities.</p></div>
+        <div class="card"><h3>Business Solutions</h3><p>Practical services and ideas that help businesses move forward.</p></div>
+        <div class="card"><h3>Global Vision</h3><p>Aiming to connect ideas, opportunities, and communities.</p></div>
+      </div>
+    </section>
+
+   
