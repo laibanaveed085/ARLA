@@ -165,8 +165,13 @@ function renderCart() {
   }
 
   document.querySelector("#cart-count").textContent = `(${count} ${count === 1 ? "item" : "items"})`;
-  document.querySelector("#menu-cart-link").textContent =
-    `View your order (${count} ${count === 1 ? "item" : "items"})`;
+  const menuCartLink = document.querySelector("#menu-cart-link");
+  document.querySelector("#menu-cart-count").textContent = String(count);
+  menuCartLink.classList.toggle("has-items", count > 0);
+  menuCartLink.setAttribute(
+    "aria-label",
+    `View your order, ${count} ${count === 1 ? "item" : "items"}`,
+  );
   cartEmpty.hidden = items.length !== 0;
   const subtotalCents = items.reduce((sum, item) => sum + item.priceCents * item.quantity, 0);
   const zone = selectedZone();

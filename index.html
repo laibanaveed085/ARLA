@@ -721,7 +721,43 @@
       line-height: 1.8;
     }
 
+    .hero-details {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 24px;
+      margin: 0 0 28px;
+      color: #c5bdac;
+      font-size: .9rem;
+    }
+    .hero-location {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-location::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold-light);
+      box-shadow: 0 0 12px rgba(241, 210, 138, .55);
+    }
+    .hero-accounts {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .hero-accounts a {
+      color: var(--gold-light);
+      font-weight: 650;
+      text-decoration: underline;
+      text-decoration-color: rgba(241, 210, 138, .4);
+      text-underline-offset: 4px;
+    }
+    .hero-accounts a:hover { color: var(--cream); }
     .hero-actions { gap: 14px; margin: 0; }
+    .hero-order-button { min-width: 170px; }
 
     .hero-image-wrap {
       position: relative;
@@ -975,6 +1011,46 @@
       font-weight: 750;
     }
     .cart-shortcut:hover { background: rgba(224, 180, 93, .1); }
+    #menu-cart-link {
+      gap: 10px;
+      margin-top: 20px;
+      padding: 11px 15px;
+      border-color: rgba(224, 180, 93, .3);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .035);
+      color: var(--cream);
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    #menu-cart-link:hover {
+      border-color: rgba(224, 180, 93, .65);
+      background: rgba(224, 180, 93, .08);
+    }
+    #menu-cart-link .cart-shortcut-count {
+      min-width: 25px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(224, 180, 93, .14);
+      color: var(--gold-light);
+      font-size: .76rem;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+    #menu-cart-link.has-items {
+      border-color: var(--gold-light);
+      background: var(--gold-light);
+      color: #18150e;
+    }
+    #menu-cart-link.has-items:hover { background: #f0c876; }
+    #menu-cart-link.has-items .cart-shortcut-count {
+      background: rgba(24, 21, 14, .12);
+      color: #18150e;
+    }
+    #menu-cart-link .cart-shortcut-arrow {
+      color: var(--gold-light);
+      transition: transform .2s ease;
+    }
+    #menu-cart-link.has-items .cart-shortcut-arrow { color: #18150e; }
+    #menu-cart-link:hover .cart-shortcut-arrow { transform: translateX(3px); }
 
     .order-online {
       margin-top: 30px;
@@ -1109,7 +1185,7 @@
     }
     .events-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
     }
     .event-card {
@@ -1134,6 +1210,28 @@
       font-weight: 500;
     }
     .event-card p { color: #b8b09e; }
+    .menu-buffet-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 18px;
+      padding: 22px 25px;
+      border: 1px solid rgba(224, 180, 93, .3);
+      border-radius: 18px;
+      background: linear-gradient(110deg, rgba(224, 180, 93, .1), rgba(255, 255, 255, .025));
+    }
+    .menu-buffet-copy { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; }
+    .menu-buffet-copy h3 {
+      margin: 0;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+    }
+    .menu-buffet-price { color: var(--gold-light); font-size: 1.15rem; font-weight: 800; }
+    .menu-buffet-note { flex-basis: 100%; margin: 0; color: #b8b09e; font-size: .88rem; }
+    .menu-buffet-card .button { flex: 0 0 auto; min-height: 44px; padding-inline: 17px; }
     .event-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
     .event-actions .button { min-height: 44px; padding-inline: 17px; }
     .faq-list { display: grid; gap: 12px; margin-top: 54px; }
@@ -1386,6 +1484,7 @@
       .about-grid, .menu-layout { gap: 28px; }
       .values { grid-template-columns: 1fr 1fr; }
       .menu-heading { display: block; }
+      .menu-buffet-card { align-items: flex-start; flex-direction: column; }
       .menu-order-note { align-items: flex-start; flex-direction: column; }
       .order-grid { grid-template-columns: 1fr; }
       .gallery-heading { display: block; }
@@ -1415,6 +1514,7 @@
       .menu-item-controls { margin-left: auto; }
       .order-online { padding: 20px; }
       .menu-order-note { padding: 20px; }
+      .menu-buffet-card { padding: 20px; }
       .menu-order-actions { width: 100%; }
       .menu-order-actions .button { flex: 1 1 auto; }
       .gallery-grid { grid-template-rows: 235px 170px 170px; gap: 10px; }
@@ -1471,7 +1571,7 @@
           <a href="#home">Home</a>
           <a href="#about">About</a>
           <a href="#menu">Menu</a>
-          <a href="#menu">Click to order</a>
+          <a href="#menu">Order now</a>
           <a href="#gallery">Gallery</a>
           <a href="#events">Events &amp; buffet</a>
           <a href="#faqs">FAQs</a>
@@ -1480,7 +1580,7 @@
         </div>
       </details>
 
-      <a class="button nav-cta" href="#menu">Click to order <span aria-hidden="true">↗</span></a>
+      <a class="button nav-cta" href="#menu">Order now <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
 
@@ -1488,16 +1588,23 @@
     <section class="hero" id="home">
       <div class="container hero-layout">
         <div class="hero-copy">
-          <span class="eyebrow">A café vision by ARLA</span>
-          <h1>Make room for <em>a slower moment.</em></h1>
+          <span class="eyebrow">Café · Hospitality · Moments</span>
+          <h1>Welcome to <em>ARLA.</em></h1>
           <p class="hero-description">
-            A welcoming café concept shaped around warm hospitality, thoughtful
-            details, and the everyday moments worth savoring.
-        </p>
+            Quality, care, and warm hospitality come together at ARLA. Explore Pakistani favorites and comfort food made for sharing.
+          </p>
 
-        <div class="hero-actions">
-            <a class="button" href="#menu">Click to order <span aria-hidden="true">→</span></a>
-            <a class="button button-outline" href="#about">Our approach</a>
+          <div class="hero-details">
+            <span class="hero-location">Gaithersburg, Maryland</span>
+            <nav class="hero-accounts" aria-label="ARLA social accounts">
+              <a href="https://www.tiktok.com/t/ZPLSXjfSa" target="_blank" rel="noopener noreferrer">TikTok</a>
+              <a href="https://www.instagram.com/thearla_house?mdxt=MXVuZGlqY3VodGhuNg%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://www.facebook.com/share/r/19xJc1R864/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a>
+            </nav>
+          </div>
+
+          <div class="hero-actions">
+            <a class="button hero-order-button" href="#menu">Ready to order? <span aria-hidden="true">→</span></a>
           </div>
         </div>
 
@@ -1567,7 +1674,11 @@
             <span class="eyebrow">Made with care, shared with joy</span>
             <h2 id="menu-title" style="margin-top:18px;">Good food. <span class="gold">Warm hearts.</span></h2>
             <p>Choose anything you like below. Add each dish to your order, adjust quantities in your cart, and review your total.</p>
-            <a class="cart-shortcut" href="#cart-panel" id="menu-cart-link">View your order (0 items)</a>
+            <a class="cart-shortcut" href="#cart-panel" id="menu-cart-link" aria-label="View your order, 0 items">
+              <span>View your order</span>
+              <span class="cart-shortcut-count" id="menu-cart-count" aria-hidden="true">0</span>
+              <span class="cart-shortcut-arrow" aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
 
@@ -1582,6 +1693,11 @@
               <li data-order-item="chicken-karahi"><span class="menu-item-name">Chicken Karahi</span><span class="menu-item-price">$11.99</span></li>
               <li data-order-item="achar-gosht"><span class="menu-item-name">Achar Gosht</span><span class="menu-item-price">$11.99</span></li>
               <li data-order-item="nihari"><span class="menu-item-name">Nihari</span><span class="menu-item-price">$13.99</span></li>
+              <li data-order-item="saag-paneer"><span class="menu-item-name">Saag Paneer</span><span class="menu-item-price">$15.99</span></li>
+              <li data-order-item="aloo-gosht"><span class="menu-item-name">Aloo Gosht</span><span class="menu-item-price">$18.99</span></li>
+              <li data-order-item="aloo-chicken"><span class="menu-item-name">Aloo Chicken</span><span class="menu-item-price">$16.99</span></li>
+              <li data-order-item="bhindi-masala"><span class="menu-item-name">Bhindi Masala</span><span class="menu-item-price">$14.99</span></li>
+              <li data-order-item="daal"><span class="menu-item-name">Daal</span><span class="menu-item-price">$12.99</span></li>
             </ul>
           </article>
 
@@ -1589,10 +1705,11 @@
             <h3 id="pasta-burgers">Pasta &amp; burgers <span>02 / Comfort</span></h3>
             <ul class="menu-items">
               <li data-order-item="chicken-burger"><span class="menu-item-name">Chicken Burger</span><span class="menu-item-price">$7.99</span></li>
+              <li data-order-item="chicken-pasta"><span class="menu-item-name">Chicken Pasta</span><span class="menu-item-price">$11.99</span></li>
               <li data-order-item="spaghetti"><span class="menu-item-name">Spaghetti</span><span class="menu-item-price">$9.99</span></li>
               <li data-order-item="lasagna"><span class="menu-item-name">Lasagna</span><span class="menu-item-price">$10.99</span></li>
-              <li data-order-item="pasta"><span class="menu-item-name">Pasta</span><span class="menu-item-price">$11.99</span></li>
-              <li data-order-item="veggie-pasta"><span class="menu-item-name">Veggie Pasta</span><span class="menu-item-price">$7.99</span></li>
+              <li data-order-item="pasta"><span class="menu-item-name">Pasta</span><span class="menu-item-price">$10.99</span></li>
+              <li data-order-item="veggie-pasta"><span class="menu-item-name">Veggie Pasta</span><span class="menu-item-price">$11.99</span></li>
             </ul>
           </article>
 
@@ -1614,6 +1731,15 @@
             </ul>
           </article>
         </div>
+
+        <aside class="menu-buffet-card" aria-labelledby="menu-buffet-title">
+          <div class="menu-buffet-copy">
+            <h3 id="menu-buffet-title">Buffet</h3>
+            <span class="menu-buffet-price">$15.99</span>
+            <p class="menu-buffet-note">Children under 5 eat free with a paying adult.</p>
+          </div>
+          <a class="button button-outline" href="tel:+12402438147">Ask about a buffet <span aria-hidden="true">↗</span></a>
+        </aside>
 
         <div class="menu-order-note">
           <p>Pickup in <strong>Gaithersburg, MD</strong>. Call or message to order.</p>
@@ -1787,15 +1913,6 @@
               <a class="button button-outline" href="https://web.whatsapp.com/send?phone=12402438147" target="_blank" rel="noopener noreferrer">Message ARLA <span aria-hidden="true">↗</span></a>
             </div>
           </article>
-          <article class="event-card">
-            <span class="event-card-label">Buffet service</span>
-            <h3>Bring ARLA to the buffet table.</h3>
-            <p>Ask ARLA about buffet food for your event. Menu options, serving details, and pricing can be discussed for your occasion.</p>
-            <div class="event-actions">
-              <a class="button" href="tel:+12402438147">Ask about a buffet <span aria-hidden="true">↗</span></a>
-              <a class="button button-outline" href="https://web.whatsapp.com/send?phone=12402438147" target="_blank" rel="noopener noreferrer">Message ARLA <span aria-hidden="true">↗</span></a>
-            </div>
-          </article>
         </div>
         <section class="faq-list" id="faqs" aria-labelledby="faq-title">
           <h3 id="faq-title">Frequently asked questions</h3>
@@ -1809,7 +1926,7 @@
           </details>
           <details class="faq-item">
             <summary>Can ARLA prepare food or a buffet for my event?</summary>
-            <p class="faq-answer">Contact ARLA to discuss event food or buffet options. Menu, serving details, pricing, and availability are confirmed directly with ARLA.</p>
+            <p class="faq-answer">The buffet is $15.99, and children under 5 eat free with a paying adult. Contact ARLA to discuss event food and confirm details.</p>
           </details>
           <details class="faq-item">
             <summary>Can I book ARLA for a gathering?</summary>
