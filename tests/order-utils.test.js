@@ -134,6 +134,12 @@ test("the ordering menu uses the complete catalog with images, descriptions, and
   assert.match(html, /id="full-menu-grid"/);
   assert.match(html, /id="category-nav"/);
   assert.match(html, /img-src 'self' data:/);
+  assert.match(html, /<meta name="robots" content="index,follow">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.thearla\.com\/menu\.html">/);
+  assert.match(html, /<title>ARLA Café — Menu &amp; Ordering<\/title>/);
+  assert.match(html, /name="description" content="Explore the ARLA Café menu in Gaithersburg, Maryland/);
+  assert.match(home, /<title>ARLA Café \| Coffee, Menu &amp; Online Ordering<\/title>/);
+  assert.match(home, /<link rel="canonical" href="https:\/\/www\.thearla\.com\/">/);
   assert.doesNotMatch(html, /class="ordering-hero"|Welcome to ARLA|Good food,/);
   assert.doesNotMatch(html, /name="fulfillment"/);
   assert.match(script, /import \{ menu \} from "\.\/menu-data\.js"/);
@@ -160,6 +166,16 @@ test("the ordering menu uses the complete catalog with images, descriptions, and
   assert.match(html, /href="menu-photo-credits\.html"/);
 });
 
+test("the sitemap and robots file make the public menu discoverable to search crawlers", async () => {
+  const sitemap = await readFile(new URL("../sitemap.xml", import.meta.url), "utf8");
+  const robots = await readFile(new URL("../robots.txt", import.meta.url), "utf8");
+
+  assert.match(sitemap, /<loc>https:\/\/www\.thearla\.com\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/www\.thearla\.com\/menu\.html<\/loc>/);
+  assert.match(robots, /^User-agent: \*\nAllow: \/\n/m);
+  assert.match(robots, /Sitemap: https:\/\/www\.thearla\.com\/sitemap\.xml/);
+});
+
 test("the cart persists across menu, review, and checkout routes", async () => {
   const store = await readFile(new URL("../cart-store.js", import.meta.url), "utf8");
   const menuPage = await readFile(new URL("../menu.html", import.meta.url), "utf8");
@@ -168,6 +184,8 @@ test("the cart persists across menu, review, and checkout routes", async () => {
   const reviewScript = await readFile(new URL("../review.js", import.meta.url), "utf8");
   const checkoutScript = await readFile(new URL("../checkout.js", import.meta.url), "utf8");
 
+  assert.match(menuPage, /class="button button-outline menu-home-link" href="index\.html">← Back to Home/);
+  assert.match(store, /export function clearCheckoutRequestId\(\)/);
   assert.match(store, /localStorage\.getItem\(CART_KEY\)/);
   assert.match(store, /localStorage\.setItem\(CART_KEY/);
   assert.match(store, /loadFulfillment/);

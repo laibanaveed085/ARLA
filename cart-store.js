@@ -4,6 +4,7 @@ const menuById = new Map(menu.map((item) => [item.id, item]));
 const CART_KEY = "arla-cart";
 const FULFILLMENT_KEY = "arla-fulfillment";
 const ORDER_ADDRESS_KEY = "arla-order-address";
+const CHECKOUT_REQUEST_KEY = "arla-checkout-request-id";
 
 export const money = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -102,6 +103,15 @@ export function clearOrderAddress() {
     return "This browser could not clear the saved delivery address.";
   }
   return "";
+}
+
+export function clearCheckoutRequestId() {
+  try {
+    sessionStorage.removeItem(CHECKOUT_REQUEST_KEY);
+    return "";
+  } catch {
+    return "This browser could not reset the payment attempt. Reload checkout before continuing.";
+  }
 }
 
 export async function loadOrderConfig() {
