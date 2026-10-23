@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080909">
+  <meta name="description" content="Choose pickup or delivery and place your ARLA Café order.">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://images.unsplash.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <title>Checkout — ARLA Café</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="checkout.js"></script>
+  <script src="mobile-nav.js" defer></script>
+</head>
+<body class="ordering-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="topbar">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="ARLA home">
+        <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+        <span><span class="brand-name">ARLA</span><span class="brand-caption">Café · hospitality · moments</span></span>
+      </a>
+      <div class="nav-links"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="review.html">Your order</a><a href="index.html#contact">Contact</a></div>
+      <details class="mobile-nav">
+        <summary aria-label="Toggle navigation menu"><span>Menu</span><span class="menu-symbol" aria-hidden="true">☰</span></summary>
+        <div class="mobile-nav-panel"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="review.html">Your order</a><a href="index.html#contact">Contact</a></div>
+      </details>
+      <a class="button nav-cta button-outline" href="review.html">Back to Order</a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="section order-page-section">
+      <div class="container checkout-page-container">
+        <span class="eyebrow">Order details</span>
+        <h1 class="page-title">Complete your <span class="gold">order.</span></h1>
+        <p class="order-intro">Add your contact details. Your pickup or delivery choice and delivery address are carried over from order review.</p>
+        <p class="order-config-status" id="order-config-status" role="status" aria-live="polite">Loading ordering information…</p>
+        <p class="cart-status" id="checkout-status" role="status" aria-live="polite"></p>
+        <div class="checkout-page-grid">
+          <section class="order-review-card checkout-summary" aria-labelledby="checkout-summary-title">
+            <h2 id="checkout-summary-title">Your order</h2>
+            <p class="cart-empty" id="checkout-empty" hidden>Your order is empty. Return to the menu to choose your favorites.</p>
+            <ul class="checkout-summary-items" id="checkout-items" aria-label="Items in your order"></ul>
+            <div class="cart-totals">
+              <div class="cart-total-line"><span>Food subtotal</span><strong id="checkout-subtotal">$0.00</strong></div>
+              <div class="cart-total-line"><span>Delivery fee</span><strong id="checkout-delivery">$0.00</strong></div>
+              <div class="cart-total-line"><span>Estimated tax</span><strong id="checkout-tax">Loading…</strong></div>
+              <div class="cart-total-line cart-total-final"><span>Total</span><strong id="checkout-total">$0.00</strong></div>
+            </div>
+            <p class="cart-total-note" id="checkout-total-note" hidden></p>
+          </section>
+
+          <form class="checkout-form checkout-page-form" id="checkout-form">
+            <h2>Contact &amp; fulfillment</h2>
+            <section class="checkout-fulfillment-card" aria-label="Selected fulfillment">
+              <strong id="checkout-fulfillment-label">Pickup</strong>
+              <p id="checkout-fulfillment-details">Pickup in Gaithersburg, Maryland.</p>
+              <p class="delivery-status" id="checkout-fulfillment-status" role="status" aria-live="polite"></p>
+              <a href="review.html">Change pickup or delivery on order review</a>
+            </section>
+            <label for="customer-name">Full name
+              <input id="customer-name" name="name" autocomplete="name" minlength="2" maxlength="100" required>
+            </label>
+            <label for="customer-phone">Phone number
+              <input id="customer-phone" name="phone" type="tel" autocomplete="tel" minlength="7" maxlength="25" required>
+            </label>
+            <label for="customer-email">Email address <span class="muted">(optional)</span>
+              <input id="customer-email" name="email" type="email" autocomplete="email" maxlength="254">
+            </label>
+            <label for="requested-time">Preferred time <span class="muted">(optional)</span>
+              <input id="requested-time" name="requestedTime" maxlength="100" placeholder="For example, 6:30 PM">
+            </label>
+            <label for="order-instructions">Special instructions <span class="muted">(optional)</span>
+              <textarea id="order-instructions" name="instructions" maxlength="1000"></textarea>
+            </label>
+            <p class="payment-notice">Online payment is not configured. ARLA will confirm the available payment method. Do not enter card details here.</p>
+            <button class="button place-order-button" id="place-order-button" type="submit" disabled>Loading checkout…</button>
+            <a class="button button-outline checkout-back-link" href="review.html">← Back to Order Review</a>
+          </form>
+        </div>
+        <section class="order-confirmation" id="order-confirmation" aria-labelledby="confirmation-title" aria-live="polite" hidden>
+          <h2 id="confirmation-title">Thank you — ARLA received your request.</h2>
+          <p id="confirmation-number"></p><p id="confirmation-customer"></p>
+          <p id="confirmation-fulfillment"></p><ul id="confirmation-items"></ul>
+          <p id="confirmation-prices"></p><p id="confirmation-total"></p>
+          <p id="confirmation-time"></p><p id="confirmation-instructions"></p>
+          <p id="confirmation-payment"></p>
+          <a class="button button-outline" href="index.html">Return to ARLA</a>
+        </section>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container footer-layout">
+      <div class="footer-top">
+        <a class="brand" href="index.html" aria-label="ARLA home">
+          <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+          <span><span class="brand-name">ARLA</span><span class="brand-caption">Café · hospitality · moments</span></span>
+        </a>
+        <div class="footer-links" aria-label="Footer navigation"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="index.html#contact">Contact</a></div>
+      </div>
+      <div class="footer-bottom"><p>© 2026 ARLA. All rights reserved.</p><p>Gaithersburg, Maryland · <a href="tel:+12402438147">+1 (240) 243-8147</a></p></div>
+    </div>
+  </footer>
+</body>
+</html>

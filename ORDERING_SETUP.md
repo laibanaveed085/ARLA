@@ -2,15 +2,17 @@
 
 ## What is implemented
 
-- The existing menu is the source catalog for item names and prices; customers can add items, change quantities, remove items, and keep their cart in browser storage.
+- The homepage shows a small featured selection and sends customers to `/menu.html`; the separate menu page presents popular items, category browsing, and an order basket.
+- `/review.html` provides an editable order summary and collects pickup or delivery preference and, when needed, the delivery address. It shows estimated delivery fees and totals before checkout.
+- `/checkout.html` carries the selected fulfillment and address forward, collects customer details, and sends orders to the existing API without asking customers to choose pickup or delivery again.
+- The shared menu catalog remains the source of item names and prices. Cart contents, fulfillment preference, and the in-progress delivery address persist in browser storage across pages.
+- Menu cards include illustrative serving-suggestion photography; these images are not ARLA food photos. Dish descriptions are concise summaries and should be confirmed by ARLA before launch.
 - The server recalculates all prices, fees, taxes, delivery eligibility, and minimums. The browser never chooses the amount saved as an order.
 - Orders are saved by Vercel serverless functions to Supabase. A confirmation appears only after Supabase accepts the order.
 - The staff dashboard is at `/staff.html`. Its API verifies Supabase sign-in and an explicit staff email allowlist before returning or changing order data.
 - Delivery can be enabled for specific city/ZIP-code pairs, with separate fee and minimum values. Only configure addresses ARLA has verified as serviceable.
 - Delivery costs $2.99 by default. The shared fee is `ARLA_DELIVERY_FEE_CENTS=299`; an individual verified delivery zone can override that with its own `feeCents`.
 - Online card payments and email notifications are not implemented. The checkout clearly tells customers that ARLA will confirm the available payment method.
-
-The customer-facing menu descriptions were not provided, so the ordering UI identifies them as “Description not provided” rather than inventing food details.
 
 ## Required before accepting online orders
 

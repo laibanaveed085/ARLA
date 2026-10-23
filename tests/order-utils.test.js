@@ -86,15 +86,72 @@ test("does not enable checkout until backend, staff, and tax configuration exist
   assert.equal(complete.taxRatePercent, 0);
 });
 
-test("the visible HTML menu and the server-side catalog contain the same items and prices", async () => {
+test("the homepage keeps only a featured menu preview and routes ordering separately", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
-  const rows = [...html.matchAll(/<li data-order-item="([^"]+)">([\s\S]*?)<\/li>/g)];
-  assert.equal(rows.length, menu.length);
-  const htmlItems = new Map(rows.map(([, id, markup]) => {
+  const featured = [...html.matchAll(/<article class="featured-card">([\s\S]*?)<\/article>/g)];
+  assert.equal(featured.length, 4);
+  assert.match(html, /href="menu\.html">Ready to Order\?/);
+  assert.doesNotMatch(html, /data-order-item=|id="checkout-form"|id="cart-list"/);
+
+  const featuredPrices = new Map(featured.map(([, markup]) => {
+    const name = markup.match(/<h3>([^<]+)<\/h3>/)?.[1];
     const price = markup.match(/\$(\d+)\.(\d{2})/);
-    assert.ok(price, `visible price exists for ${id}`);
-    return [id, Number(price[1]) * 100 + Number(price[2])];
+    assert.ok(name);
+    assert.ok(price, `featured price exists for ${name}`);
+    return [name, Number(price[1]) * 100 + Number(price[2])];
   }));
-  assert.equal(htmlItems.size, menu.length);
-  for (const item of menu) assert.equal(htmlItems.get(item.id), item.priceCents, item.name);
+  for (const item of menu.filter(({ id }) =>
+    ["chicken-biryani", "saag-paneer", "chicken-pasta", "chai"].includes(id))) {
+    assert.equal(featuredPrices.get(item.name), item.priceCents, item.name);
+  }
+});
+
+test("the ordering menu uses the complete catalog with images, descriptions, and categories", async () => {
+  const html = await readFile(new URL("../menu.html", import.meta.url), "utf8");
+  const script = await readFile(new URL("../menu.js", import.meta.url), "utf8");
+  assert.match(html, /id="featured-menu-grid"/);
+  assert.match(html, /id="full-menu-grid"/);
+  assert.match(html, /id="category-nav"/);
+  assert.doesNotMatch(html, /class="ordering-hero"|Welcome to ARLA|Good food,/);
+  assert.doesNotMatch(html, /name="fulfillment"/);
+  assert.match(script, /import \{ menu \} from "\.\/menu-data\.js"/);
+  assert.match(script, /item\.description/);
+  assert.match(script, /item\.image/);
+  assert.match(script, /data-product-controls/);
+  assert.equal(menu.length, 24);
+  assert.ok(menu.every((item) => item.category && item.description && item.image));
+  assert.equal(new Set(menu.map(({ image }) => image)).size, menu.length);
+});
+
+test("the cart persists across menu, review, and checkout routes", async () => {
+  const store = await readFile(new URL("../cart-store.js", import.meta.url), "utf8");
+  const menuPage = await readFile(new URL("../menu.html", import.meta.url), "utf8");
+  const reviewPage = await readFile(new URL("../review.html", import.meta.url), "utf8");
+  const checkoutPage = await readFile(new URL("../checkout.html", import.meta.url), "utf8");
+  const reviewScript = await readFile(new URL("../review.js", import.meta.url), "utf8");
+  const checkoutScript = await readFile(new URL("../checkout.js", import.meta.url), "utf8");
+
+  assert.match(store, /localStorage\.getItem\(CART_KEY\)/);
+  assert.match(store, /localStorage\.setItem\(CART_KEY/);
+  assert.match(store, /loadFulfillment/);
+  assert.match(store, /loadOrderAddress/);
+  assert.match(store, /saveOrderAddress/);
+  assert.match(menuPage, /data-review-order/);
+  assert.match(reviewPage, /id="review-items"/);
+  assert.match(reviewPage, /id="checkout-link"/);
+  assert.match(reviewPage, /name="fulfillment"/);
+  assert.match(reviewPage, /id="review-address-fields"/);
+  assert.match(reviewScript, /getDeliveryZone/);
+  assert.match(reviewScript, /calculateTotals/);
+  assert.match(reviewScript, /remove-item/);
+  assert.match(checkoutPage, /id="checkout-form"/);
+  assert.doesNotMatch(checkoutPage, /name="fulfillment"/);
+  assert.match(checkoutPage, /id="checkout-fulfillment-details"/);
+  assert.match(checkoutPage, /id="place-order-button"/);
+  assert.match(checkoutScript, /fetch\("\/api\/orders"/);
+  assert.match(checkoutScript, /loadOrderAddress/);
+  assert.match(checkoutScript, /fulfillment:\s*fulfillment\(\)/);
+  assert.match(checkoutScript, /street:\s*orderAddress\.street/);
+  assert.match(checkoutScript, /city:\s*orderAddress\.city/);
+  assert.match(checkoutScript, /zipCode:\s*orderAddress\.zipCode/);
 });
