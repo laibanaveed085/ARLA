@@ -81,9 +81,28 @@ test("does not enable checkout until backend, staff, and tax configuration exist
     ARLA_TAX_RATE: "0",
     ARLA_TAX_DELIVERY: "false",
     ARLA_DELIVERY_ZONES: "[]",
+    STRIPE_SECRET_KEY: "sk_test_example",
+    STRIPE_WEBHOOK_SECRET: "whsec_example",
+    PUBLIC_SITE_URL: "https://www.thearla.com",
   });
   assert.equal(complete.orderingEnabled, true);
+  assert.equal(complete.stripePaymentsEnabled, true);
   assert.equal(complete.taxRatePercent, 0);
+
+  const invalidRedirectUrl = getPublicOrderConfig({
+    SUPABASE_URL: "https://example.supabase.co",
+    SUPABASE_ANON_KEY: "public-test-key",
+    SUPABASE_SERVICE_ROLE_KEY: "server-only-test-key",
+    ARLA_STAFF_EMAILS: "staff@example.test",
+    ARLA_TAX_RATE: "0",
+    ARLA_TAX_DELIVERY: "false",
+    ARLA_DELIVERY_ZONES: "[]",
+    STRIPE_SECRET_KEY: "sk_test_example",
+    STRIPE_WEBHOOK_SECRET: "whsec_example",
+    PUBLIC_SITE_URL: "https://www.thearla.com/redirect?next=example",
+  });
+  assert.equal(invalidRedirectUrl.stripePaymentsEnabled, false);
+  assert.ok(invalidRedirectUrl.paymentConfigurationIssues.includes("HTTPS public site URL"));
 });
 
 test("the homepage keeps only a featured menu preview and routes ordering separately", async () => {
@@ -108,19 +127,37 @@ test("the homepage keeps only a featured menu preview and routes ordering separa
 
 test("the ordering menu uses the complete catalog with images, descriptions, and categories", async () => {
   const html = await readFile(new URL("../menu.html", import.meta.url), "utf8");
+  const home = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const script = await readFile(new URL("../menu.js", import.meta.url), "utf8");
+  const credits = await readFile(new URL("../menu-photo-credits.html", import.meta.url), "utf8");
   assert.match(html, /id="featured-menu-grid"/);
   assert.match(html, /id="full-menu-grid"/);
   assert.match(html, /id="category-nav"/);
+  assert.match(html, /img-src 'self' data:/);
   assert.doesNotMatch(html, /class="ordering-hero"|Welcome to ARLA|Good food,/);
   assert.doesNotMatch(html, /name="fulfillment"/);
   assert.match(script, /import \{ menu \} from "\.\/menu-data\.js"/);
   assert.match(script, /item\.description/);
   assert.match(script, /item\.image/);
   assert.match(script, /data-product-controls/);
-  assert.equal(menu.length, 24);
+  assert.equal(menu.length, 26);
   assert.ok(menu.every((item) => item.category && item.description && item.image));
   assert.equal(new Set(menu.map(({ image }) => image)).size, menu.length);
+  const kebabItems = menu.filter(({ id }) =>
+    ["chicken-kebab", "beef-kebab", "shami-kebab"].includes(id));
+  assert.equal(kebabItems.length, 3);
+  assert.ok(kebabItems.every(({ priceCents }) => priceCents === 699));
+  assert.equal(menu.find(({ id }) => id === "fruit-chaat").name, "Fruit Salad");
+  for (const item of menu) {
+    assert.equal(item.image, `/assets/menu/${item.id}.jpg`);
+    const image = await readFile(new URL(`../assets/menu/${item.id}.jpg`, import.meta.url));
+    assert.ok(image.byteLength > 2000, `${item.name} photo is present`);
+  }
+  for (const id of ["chicken-biryani", "saag-paneer", "chicken-pasta", "chai"]) {
+    assert.ok(home.includes(`src="assets/menu/${id}.jpg"`), `${id} featured image matches its dish`);
+  }
+  assert.equal([...credits.matchAll(/<li><strong>/g)].length, menu.length);
+  assert.match(html, /href="menu-photo-credits\.html"/);
 });
 
 test("the cart persists across menu, review, and checkout routes", async () => {
@@ -148,10 +185,19 @@ test("the cart persists across menu, review, and checkout routes", async () => {
   assert.doesNotMatch(checkoutPage, /name="fulfillment"/);
   assert.match(checkoutPage, /id="checkout-fulfillment-details"/);
   assert.match(checkoutPage, /id="place-order-button"/);
-  assert.match(checkoutScript, /fetch\("\/api\/orders"/);
+  assert.match(checkoutScript, /fetch\("\/api\/checkout-session"/);
   assert.match(checkoutScript, /loadOrderAddress/);
   assert.match(checkoutScript, /fulfillment:\s*fulfillment\(\)/);
   assert.match(checkoutScript, /street:\s*orderAddress\.street/);
   assert.match(checkoutScript, /city:\s*orderAddress\.city/);
   assert.match(checkoutScript, /zipCode:\s*orderAddress\.zipCode/);
+  const confirmationPage = await readFile(new URL("../order-confirmation.html", import.meta.url), "utf8");
+  const confirmationScript = await readFile(new URL("../order-confirmation.js", import.meta.url), "utf8");
+  const staffScript = await readFile(new URL("../staff.js", import.meta.url), "utf8");
+  const staffApi = await readFile(new URL("../api/staff/orders.js", import.meta.url), "utf8");
+  assert.match(confirmationScript, /api\/checkout-status/);
+  assert.match(confirmationScript, /paymentStatus === "paid"/);
+  assert.match(staffApi, /payment_status=in\.\(manual,paid\)/);
+  assert.match(staffScript, /Paid · Stripe/);
+  assert.match(confirmationPage, /Checking your payment/);
 });

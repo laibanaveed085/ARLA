@@ -1163,6 +1163,8 @@
     }
 
     .gallery-disclaimer { margin: 18px 0 0; color: #b8b09e; font-size: .83rem; }
+    .menu-photo-credits-list { display: grid; gap: 12px; max-width: 900px; margin: 28px 0; padding-left: 22px; color: #d1cbbc; }
+    .menu-photo-credits-list a { color: var(--gold-light); }
 
     .events-section {
       background:

@@ -1,6 +1,7 @@
 import { menu } from "./menu-data.js";
 import {
   getCartItems,
+  clearCheckoutRequestId,
   loadCart,
   money,
   saveCart,
@@ -20,7 +21,7 @@ const basketBar = document.querySelector("#basket-bar");
 if (cartState.error) status.textContent = cartState.error;
 
 function imageUrl(item) {
-  return `https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=720&q=80`;
+  return item.image;
 }
 
 function makeProductCard(item, featured = false) {
@@ -29,7 +30,7 @@ function makeProductCard(item, featured = false) {
   const image = document.createElement("img");
   image.className = "product-image";
   image.src = imageUrl(item);
-  image.alt = `Illustrative serving suggestion for ${item.name}`;
+  image.alt = `Illustrative photo of ${item.name}`;
   image.width = 720;
   image.height = 480;
   image.loading = featured ? "eager" : "lazy";
@@ -155,6 +156,7 @@ function changeQuantity(id, delta) {
   const next = (cart[id] || 0) + delta;
   if (next <= 0) delete cart[id];
   else cart[id] = Math.min(20, next);
+  clearCheckoutRequestId();
   const item = menu.find((entry) => entry.id === id);
   status.textContent = saveCart(cart) || `${item.name} ${next <= 0 ? "removed from" : "updated in"} your order.`;
   for (const host of document.querySelectorAll(`[data-product-controls="${id}"]`)) {
