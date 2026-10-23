@@ -6,8 +6,7 @@ import {
   loadOrderAddress,
   loadOrderConfig,
   money,
-  saveCart,
-  clearOrderAddress,
+  clearCheckoutRequestId,
 } from "./cart-store.js";
 
 const loaded = loadCart();
@@ -16,11 +15,12 @@ const form = document.querySelector("#checkout-form");
 const submitButton = document.querySelector("#place-order-button");
 const status = document.querySelector("#checkout-status");
 const configStatus = document.querySelector("#order-config-status");
-const confirmation = document.querySelector("#order-confirmation");
 let orderAddress = loadOrderAddress();
 let selectedFulfillment = loadFulfillment();
 let config = null;
 let submitting = false;
+const requestIdKey = "arla-checkout-request-id";
+const formStateKey = "arla-checkout-form";
 
 if (loaded.error) status.textContent = loaded.error;
 
@@ -109,54 +109,72 @@ function updateSubmit(hasItems, subtotalCents, zone) {
     orderAddress.street.trim() && zone && subtotalCents >= zone.minimumCents,
   );
   submitButton.disabled = !config?.orderingEnabled || config.taxRatePercent == null ||
-    !hasItems || !deliveryReady || submitting;
+    !config?.stripePaymentsEnabled || !hasItems || !deliveryReady || submitting;
   if (submitting) submitButton.textContent = "Sending order…";
   else if (!config?.orderingEnabled) submitButton.textContent = "Online ordering isn't available";
+  else if (!config?.stripePaymentsEnabled) submitButton.textContent = "Stripe test checkout isn't configured";
   else if (config.taxRatePercent == null) submitButton.textContent = "Tax settings aren't configured";
   else if (!hasItems) submitButton.textContent = "Add items to your order";
   else if (!deliveryReady) submitButton.textContent = "Check delivery address and minimum";
-  else submitButton.textContent = "Place Order";
+  else submitButton.textContent = "Continue to secure payment";
 }
 
-function renderConfirmation(result) {
-  document.querySelector("#confirmation-number").textContent = `Order ${result.orderNumber}`;
-  document.querySelector("#confirmation-customer").textContent =
-    `${result.customerName} · ${result.phone}`;
-  document.querySelector("#confirmation-fulfillment").textContent =
-    result.fulfillment === "pickup"
-      ? "Pickup in Gaithersburg, Maryland."
-      : `Delivery to ${result.address.street}, ${result.address.city}, ${result.address.state} ${result.address.zipCode}. ARLA will confirm the exact address.`;
-  const lines = document.querySelector("#confirmation-items");
-  lines.replaceChildren();
-  for (const item of result.items) {
-    const line = document.createElement("li");
-    line.textContent = `${item.quantity} × ${item.name} — ${money.format(item.price_cents * item.quantity / 100)}`;
-    lines.append(line);
+function restoreForm() {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(formStateKey) || "{}");
+    for (const name of ["name", "phone", "email", "requestedTime", "instructions"]) {
+      if (typeof saved[name] === "string") form.elements[name].value = saved[name];
+    }
+  } catch {
+    status.textContent = "Saved checkout details could not be restored. Please re-enter your contact details.";
   }
-  document.querySelector("#confirmation-prices").textContent =
-    `Food ${money.format(result.subtotalCents / 100)} · Delivery ${money.format(result.deliveryFeeCents / 100)} · Tax ${money.format(result.taxCents / 100)}`;
-  document.querySelector("#confirmation-total").textContent =
-    `Total: ${money.format(result.totalCents / 100)}`;
-  document.querySelector("#confirmation-time").textContent = result.requestedTime
-    ? `Requested time: ${result.requestedTime} (subject to ARLA confirmation)`
-    : "";
-  document.querySelector("#confirmation-instructions").textContent = result.instructions
-    ? `Special instructions: ${result.instructions}`
-    : "";
-  document.querySelector("#confirmation-payment").textContent = result.paymentNotice;
-  confirmation.hidden = false;
-  confirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function persistForm() {
+  const data = new FormData(form);
+  try {
+    sessionStorage.setItem(formStateKey, JSON.stringify({
+      name: data.get("name"),
+      phone: data.get("phone"),
+      email: data.get("email"),
+      requestedTime: data.get("requestedTime"),
+      instructions: data.get("instructions"),
+    }));
+  } catch {
+    status.textContent = "This browser could not preserve checkout details if you return from Stripe.";
+  }
+}
+
+function getCheckoutRequestId() {
+  try {
+    const existing = sessionStorage.getItem(requestIdKey);
+    if (existing && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(existing)) {
+      return existing;
+    }
+    const requestId = crypto.randomUUID();
+    sessionStorage.setItem(requestIdKey, requestId);
+    return requestId;
+  } catch {
+    throw new Error("This browser could not safely start checkout. Please enable session storage and try again.");
+  }
 }
 
 async function initialize() {
+  restoreForm();
+  if (new URLSearchParams(location.search).get("payment") === "cancelled") {
+    status.textContent = "Payment was not completed. Your order is saved; you can return to Stripe Checkout to try again.";
+  }
   try {
     config = await loadOrderConfig();
-    if (!config.orderingEnabled) {
-      const needs = config.configurationIssues?.join(", ") || "business configuration";
-      configStatus.textContent = `Online checkout is not active yet. ARLA still needs to configure: ${needs}.`;
+    if (!config.orderingEnabled || !config.stripePaymentsEnabled) {
+      const needs = [
+        ...(config.configurationIssues || []),
+        ...(config.paymentConfigurationIssues || []),
+      ].join(", ") || "business configuration";
+      configStatus.textContent = `Stripe test checkout is not active yet. ARLA still needs to configure: ${needs}.`;
       configStatus.dataset.state = "error";
     } else {
-      configStatus.textContent = "Ordering is available. ARLA will confirm your order and payment method.";
+      configStatus.textContent = "Secure Stripe test checkout is ready. Your order is sent to ARLA after payment is confirmed.";
       configStatus.dataset.state = "";
     }
   } catch (error) {
@@ -169,47 +187,66 @@ async function initialize() {
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!form.reportValidity() || submitButton.disabled || submitting) return;
-  const data = new FormData(form);
-  const payload = {
-    name: data.get("name"),
-    phone: data.get("phone"),
-    email: data.get("email"),
-    fulfillment: fulfillment(),
-    instructions: data.get("instructions"),
-    requestedTime: data.get("requestedTime"),
-    items: Object.entries(cart).map(([id, quantity]) => ({ id, quantity })),
-  };
-  if (payload.fulfillment === "delivery") {
-    payload.address = {
-      street: orderAddress.street,
-      city: orderAddress.city,
-      state: "MD",
-      zipCode: orderAddress.zipCode,
+  let payload;
+  try {
+    const data = new FormData(form);
+    payload = {
+      checkoutRequestId: getCheckoutRequestId(),
+      name: data.get("name"),
+      phone: data.get("phone"),
+      email: data.get("email"),
+      fulfillment: fulfillment(),
+      instructions: data.get("instructions"),
+      requestedTime: data.get("requestedTime"),
+      items: Object.entries(cart).map(([id, quantity]) => ({ id, quantity })),
     };
+    if (payload.fulfillment === "delivery") {
+      payload.address = {
+        street: orderAddress.street,
+        city: orderAddress.city,
+        state: "MD",
+        zipCode: orderAddress.zipCode,
+      };
+    }
+  } catch (error) {
+    status.textContent = error.message;
+    return;
   }
 
   submitting = true;
   renderSummary();
   try {
-    const response = await fetch("/api/orders", {
+    persistForm();
+    const response = await fetch("/api/checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(payload),
     });
     const result = await response.json();
-    if (!response.ok) throw new Error(result.error || "ARLA could not receive this order.");
-    for (const id of Object.keys(cart)) delete cart[id];
-    const storageError = saveCart(cart);
-    const addressStorageError = clearOrderAddress();
-    status.textContent = storageError || addressStorageError || "Your order was saved and sent to ARLA.";
-    form.reset();
-    renderConfirmation(result);
+    if (!response.ok) {
+      if (/details changed|failed|expired|no longer available/i.test(result.error || "")) {
+        const resetError = clearCheckoutRequestId();
+        if (resetError) throw new Error(`${result.error} ${resetError}`);
+      }
+      throw new Error(result.error || "ARLA could not start secure checkout.");
+    }
+    const checkoutUrl = new URL(result.checkoutUrl);
+    if (checkoutUrl.protocol !== "https:" || checkoutUrl.hostname !== "checkout.stripe.com") {
+      throw new Error("ARLA received an invalid Stripe checkout link.");
+    }
+    status.textContent = "Redirecting to secure Stripe Checkout…";
+    location.assign(checkoutUrl.toString());
   } catch (error) {
     status.textContent = error.message;
   } finally {
     submitting = false;
     renderSummary();
   }
+});
+
+form.addEventListener("input", () => {
+  clearCheckoutRequestId();
+  persistForm();
 });
 
 initialize();

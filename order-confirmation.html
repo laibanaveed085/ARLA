@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080909">
+  <meta name="description" content="Check payment confirmation for your ARLA Café order.">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://images.unsplash.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <title>Order Confirmation — ARLA Café</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="order-confirmation.js"></script>
+  <script src="mobile-nav.js" defer></script>
+</head>
+<body class="ordering-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="topbar">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="ARLA home">
+        <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+        <span><span class="brand-name">ARLA</span><span class="brand-caption">Café · hospitality · moments</span></span>
+      </a>
+      <div class="nav-links"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="index.html#contact">Contact</a></div>
+      <details class="mobile-nav">
+        <summary aria-label="Toggle navigation menu"><span>Menu</span><span class="menu-symbol" aria-hidden="true">☰</span></summary>
+        <div class="mobile-nav-panel"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="index.html#contact">Contact</a></div>
+      </details>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="section order-page-section">
+      <div class="container order-page-container">
+        <span class="eyebrow">Stripe Checkout</span>
+        <h1 class="page-title">Payment <span class="gold">confirmation.</span></h1>
+        <section class="order-review-card payment-confirmation-card" aria-live="polite">
+          <h2 id="confirmation-heading">Checking your payment…</h2>
+          <p id="confirmation-message">We will confirm your order after Stripe notifies ARLA that payment has completed.</p>
+          <p id="confirmation-order-number"></p>
+          <p id="confirmation-total"></p>
+          <p id="confirmation-fulfillment"></p>
+          <button class="button button-outline" id="check-payment-button" type="button">Check payment status</button>
+          <a class="button" id="confirmation-continue" href="menu.html" hidden>Return to ARLA</a>
+          <a class="button button-outline" id="confirmation-retry" href="checkout.html" hidden>Return to checkout</a>
+        </section>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container footer-layout">
+      <div class="footer-top">
+        <a class="brand" href="index.html" aria-label="ARLA home">
+          <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+          <span><span class="brand-name">ARLA</span><span class="brand-caption">Café · hospitality · moments</span></span>
+        </a>
+        <div class="footer-links" aria-label="Footer navigation"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="index.html#contact">Contact</a></div>
+      </div>
+      <div class="footer-bottom"><p>© 2026 ARLA. All rights reserved.</p><p>Gaithersburg, Maryland · <a href="tel:+12402438147">+1 (240) 243-8147</a></p></div>
+    </div>
+  </footer>
+</body>
+</html>
