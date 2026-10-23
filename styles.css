@@ -1656,6 +1656,7 @@
       background: #0d0e0c;
     }
     .full-menu-heading { margin-bottom: 22px; }
+    .menu-home-link { margin-bottom: 24px; }
     .category-nav {
       position: sticky;
       top: 82px;
