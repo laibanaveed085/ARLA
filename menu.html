@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080909">
+  <meta name="description" content="Browse ARLA Café's Pakistani favorites and build your order.">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://images.unsplash.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <title>ARLA Café — Menu &amp; Ordering</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="menu.js"></script>
+  <script src="mobile-nav.js" defer></script>
+</head>
+<body class="ordering-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="topbar">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="ARLA home">
+        <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+        <span><span class="brand-name">ARLA</span><span class="brand-caption">Café · hospitality · moments</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="#featured-menu">Popular</a>
+        <a href="#full-menu">Full menu</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <details class="mobile-nav">
+        <summary aria-label="Toggle navigation menu"><span>Menu</span><span class="menu-symbol" aria-hidden="true">☰</span></summary>
+        <div class="mobile-nav-panel">
+          <a href="index.html">Home</a>
+          <a href="#featured-menu">Popular</a>
+          <a href="#full-menu">Full menu</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+      </details>
+      <a class="button nav-cta" data-review-order href="review.html">Review Your Order</a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="ordering-featured" id="featured-menu" aria-labelledby="featured-menu-title">
+      <div class="container">
+        <div class="ordering-section-heading">
+          <div>
+            <span class="eyebrow">A good place to start</span>
+            <h2 id="featured-menu-title">Popular at <span class="gold">ARLA.</span></h2>
+          </div>
+          <a class="text-link" href="#full-menu">Browse the full menu <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="product-grid featured-product-grid" id="featured-menu-grid"></div>
+      </div>
+    </section>
+
+    <section class="full-menu-section" id="full-menu" aria-labelledby="full-menu-title">
+      <div class="container">
+        <div class="ordering-section-heading full-menu-heading">
+          <div>
+            <span class="eyebrow">From our kitchen</span>
+            <h2 id="full-menu-title">The full <span class="gold">menu.</span></h2>
+            <p>Browse by category and add items to your order as you go.</p>
+          </div>
+          <a class="button button-outline" data-review-order href="review.html">Review Your Order</a>
+        </div>
+        <nav class="category-nav" id="category-nav" aria-label="Menu categories"></nav>
+        <p class="cart-status menu-status" id="menu-status" role="status" aria-live="polite"></p>
+        <div id="full-menu-grid"></div>
+        <aside class="menu-buffet-card" aria-labelledby="buffet-title">
+          <div>
+            <span class="eyebrow">Gather around</span>
+            <h3 id="buffet-title">ARLA buffet</h3>
+            <p><strong>$15.99 per person</strong> · Children under 5 eat free with a paying adult.</p>
+          </div>
+          <a class="button button-outline" href="tel:+12402438147">Ask about buffet <span aria-hidden="true">↗</span></a>
+        </aside>
+        <p class="gallery-disclaimer">Menu photos are illustrative serving suggestions and are not photographs of ARLA's dishes.</p>
+      </div>
+    </section>
+  </main>
+
+  <aside class="basket-bar" id="basket-bar" aria-label="Current order" hidden>
+    <div class="container basket-bar-inner">
+      <div><strong id="basket-count">0 items</strong><span> · Food subtotal <strong id="basket-subtotal">$0.00</strong></span></div>
+      <a class="button" data-review-order href="review.html">Review Your Order <span aria-hidden="true">→</span></a>
+    </div>
+  </aside>
+
+  <footer>
+    <div class="container footer-layout">
+      <div class="footer-top">
+        <a class="brand" href="index.html" aria-label="ARLA home">
+          <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+          <span><span class="brand-name">ARLA</span><span class="brand-caption">Café · hospitality · moments</span></span>
+        </a>
+        <div class="footer-links" aria-label="Footer navigation">
+          <a href="index.html">Home</a><a href="menu.html">Menu</a><a href="index.html#contact">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>© 2026 ARLA. All rights reserved.</p><p>Gaithersburg, Maryland · <a href="tel:+12402438147">+1 (240) 243-8147</a></p></div>
+    </div>
+  </footer>
+</body>
+</html>

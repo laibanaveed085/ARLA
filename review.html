@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080909">
+  <meta name="description" content="Review your ARLA Café order and continue to checkout.">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://images.unsplash.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <title>Review Your Order — ARLA Café</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="review.js"></script>
+  <script src="mobile-nav.js" defer></script>
+</head>
+<body class="ordering-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="topbar">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="ARLA home">
+        <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+        <span><span class="brand-name">ARLA</span><span class="brand-caption">Café · hospitality · moments</span></span>
+      </a>
+      <div class="nav-links"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="index.html#contact">Contact</a></div>
+      <details class="mobile-nav">
+        <summary aria-label="Toggle navigation menu"><span>Menu</span><span class="menu-symbol" aria-hidden="true">☰</span></summary>
+        <div class="mobile-nav-panel"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="index.html#contact">Contact</a></div>
+      </details>
+      <a class="button nav-cta button-outline" href="menu.html">Continue Shopping</a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="section order-page-section">
+      <div class="container order-page-container">
+        <span class="eyebrow">Your ARLA order</span>
+        <h1 class="page-title">Review your <span class="gold">order.</span></h1>
+        <p class="order-intro">Check your items and quantities before continuing to checkout.</p>
+        <p class="cart-status" id="review-status" role="status" aria-live="polite"></p>
+        <section class="order-review-card" aria-label="Order summary">
+          <p class="cart-empty" id="review-empty" hidden>Your order is empty. Continue shopping to add your favorites.</p>
+          <ul class="review-items" id="review-items" aria-label="Selected menu items"></ul>
+          <div class="cart-totals">
+            <div class="cart-total-line"><span>Food subtotal</span><strong id="review-subtotal">$0.00</strong></div>
+            <div class="cart-total-line"><span>Delivery fee</span><strong id="review-delivery-fee">$0.00</strong></div>
+            <div class="cart-total-line"><span>Estimated tax</span><strong id="review-tax">Loading…</strong></div>
+            <div class="cart-total-line cart-total-final"><span id="review-total-label">Estimated total</span><strong id="review-total">$0.00</strong></div>
+            <p class="cart-total-note" id="review-total-note" hidden></p>
+          </div>
+        </section>
+        <section class="order-review-card review-fulfillment-card" aria-labelledby="fulfillment-title">
+          <h2 id="fulfillment-title">Pickup or delivery?</h2>
+          <fieldset class="fulfillment-options">
+            <legend>Choose how you would like to receive your order</legend>
+            <label class="fulfillment-choice"><input type="radio" name="fulfillment" value="pickup"> Pickup</label>
+            <label class="fulfillment-choice"><input type="radio" name="fulfillment" value="delivery"> Delivery</label>
+          </fieldset>
+          <p class="pickup-details" id="pickup-details">Pickup is in Gaithersburg, Maryland.</p>
+          <div class="address-fields" id="review-address-fields" hidden>
+            <label for="review-street">Street address
+              <input id="review-street" name="street" autocomplete="street-address" maxlength="200">
+            </label>
+            <label for="review-city">City
+              <select id="review-city" name="city" autocomplete="address-level2">
+                <option value="">Choose a city</option>
+                <option>Germantown</option><option>Rockville</option><option>Gaithersburg</option>
+              </select>
+            </label>
+            <label for="review-zip">ZIP code
+              <input id="review-zip" name="zipCode" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}" maxlength="5">
+            </label>
+          </div>
+          <p class="delivery-status" id="review-delivery-status" role="status" aria-live="polite"></p>
+        </section>
+        <div class="order-page-actions">
+          <a class="button button-outline" href="menu.html">← Continue Shopping</a>
+          <a class="button" id="checkout-link" href="checkout.html" hidden>Proceed to Checkout <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container footer-layout">
+      <div class="footer-top">
+        <a class="brand" href="index.html" aria-label="ARLA home">
+          <img class="brand-logo" src="assets/arla-logo.jpg" alt="" width="720" height="720" aria-hidden="true">
+          <span><span class="brand-name">ARLA</span><span class="brand-caption">Café · hospitality · moments</span></span>
+        </a>
+        <div class="footer-links" aria-label="Footer navigation"><a href="index.html">Home</a><a href="menu.html">Menu</a><a href="index.html#contact">Contact</a></div>
+      </div>
+      <div class="footer-bottom"><p>© 2026 ARLA. All rights reserved.</p><p>Gaithersburg, Maryland · <a href="tel:+12402438147">+1 (240) 243-8147</a></p></div>
+    </div>
+  </footer>
+</body>
+</html>
