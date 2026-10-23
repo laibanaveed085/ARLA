@@ -183,8 +183,12 @@ test("the cart persists across menu, review, and checkout routes", async () => {
   const checkoutPage = await readFile(new URL("../checkout.html", import.meta.url), "utf8");
   const reviewScript = await readFile(new URL("../review.js", import.meta.url), "utf8");
   const checkoutScript = await readFile(new URL("../checkout.js", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../styles.css", import.meta.url), "utf8");
 
   assert.match(menuPage, /class="button button-outline menu-home-link" href="index\.html">← Back to Home/);
+  assert.doesNotMatch(menuPage, /class="button nav-cta" data-review-order/);
+  assert.ok(menuPage.indexOf("</main>") < menuPage.indexOf('id="basket-bar"'));
+  assert.match(styles, /\.basket-bar\s*\{\s*position:\s*fixed/);
   assert.match(store, /export function clearCheckoutRequestId\(\)/);
   assert.match(store, /localStorage\.getItem\(CART_KEY\)/);
   assert.match(store, /localStorage\.setItem\(CART_KEY/);
