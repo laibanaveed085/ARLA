@@ -163,6 +163,13 @@ test("the ordering menu uses the complete catalog with images, descriptions, and
     assert.ok(home.includes(`src="assets/menu/${id}.jpg"`), `${id} featured image matches its dish`);
   }
   assert.equal([...credits.matchAll(/<li><strong>/g)].length, menu.length);
+  for (const name of [
+    "Chicken Biryani", "Chicken Pulao", "Beef Pulao", "Beef Biryani",
+    "Chicken Burger", "Chicken Karahi", "Achar Gosht", "Nihari",
+    "Aloo Gosht", "Bhindi Masala", "Pasta", "Daal",
+  ]) {
+    assert.match(credits, new RegExp(`<strong>${name}</strong> — Photo provided by ARLA\\.`));
+  }
   assert.match(html, /href="menu-photo-credits\.html"/);
 });
 
@@ -203,12 +210,15 @@ test("the cart persists across menu, review, and checkout routes", async () => {
   assert.match(reviewScript, /getDeliveryZone/);
   assert.match(reviewScript, /calculateTotals/);
   assert.match(reviewScript, /remove-item/);
+  assert.match(reviewScript, /function persistCartChange[\s\S]*?clearCheckoutRequestId\(\)/);
   assert.match(checkoutPage, /id="checkout-form"/);
   assert.doesNotMatch(checkoutPage, /name="fulfillment"/);
   assert.match(checkoutPage, /id="checkout-fulfillment-details"/);
   assert.match(checkoutPage, /id="place-order-button"/);
+  assert.match(checkoutScript, /Continue to secure payment/);
   assert.match(checkoutScript, /fetch\("\/api\/checkout-session"/);
   assert.match(checkoutScript, /loadOrderAddress/);
+  assert.match(checkoutScript, /\/details changed\|failed\|expired\|no longer available\/i/);
   assert.match(checkoutScript, /fulfillment:\s*fulfillment\(\)/);
   assert.match(checkoutScript, /street:\s*orderAddress\.street/);
   assert.match(checkoutScript, /city:\s*orderAddress\.city/);

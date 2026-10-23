@@ -55,6 +55,7 @@ p { color: var(--muted); }
 .status-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; margin-top: 18px; }
 .status-select { min-width: 0; }
 .order-status-label { display: inline-flex; padding: 4px 9px; border: 1px solid rgba(224, 180, 93, .3); border-radius: 999px; color: var(--gold-light); font-size: .76rem; white-space: nowrap; }
+.payment-status-label { display: inline-flex; margin-left: 6px; padding: 4px 9px; border: 1px solid rgba(107, 183, 130, .35); border-radius: 999px; color: #b4e3bd; font-size: .76rem; white-space: nowrap; }
 @media (max-width: 700px) {
   .staff-main { margin-top: 28px; }
   .dashboard-heading { align-items: flex-start; flex-direction: column; }

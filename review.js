@@ -1,6 +1,7 @@
 import { calculateTotals, getDeliveryZone } from "./lib/order-utils.js";
 import {
   getCartItems,
+  clearCheckoutRequestId,
   loadCart,
   loadFulfillment,
   loadOrderAddress,
@@ -42,11 +43,17 @@ function control(label, ariaLabel, action, disabled = false) {
   return button;
 }
 
+function persistCartChange(message) {
+  const resetError = clearCheckoutRequestId();
+  const saveError = saveCart(cart);
+  status.textContent = [saveError || message, resetError].filter(Boolean).join(" ");
+}
+
 function setQuantity(item, change) {
   const next = (cart[item.id] || 0) + change;
   if (next <= 0) delete cart[item.id];
   else cart[item.id] = Math.min(20, next);
-  status.textContent = saveCart(cart) || `${item.name} ${next <= 0 ? "removed from" : "updated in"} your order.`;
+  persistCartChange(`${item.name} ${next <= 0 ? "removed from" : "updated in"} your order.`);
   render();
 }
 
@@ -122,7 +129,7 @@ function render() {
     lineTotal.textContent = money.format(item.priceCents * item.quantity / 100);
     const remove = control("Remove", `Remove ${item.name} from your order`, () => {
       delete cart[item.id];
-      status.textContent = saveCart(cart) || `${item.name} removed from your order.`;
+      persistCartChange(`${item.name} removed from your order.`);
       render();
     });
     remove.className = "remove-item";
@@ -172,6 +179,7 @@ for (const input of document.querySelectorAll('input[name="fulfillment"]')) {
   input.addEventListener("change", () => {
     if (!input.checked) return;
     fulfillment = input.value;
+    clearCheckoutRequestId();
     status.textContent = saveFulfillment(fulfillment);
     render();
   });
@@ -183,6 +191,7 @@ function updateAddress() {
     city: addressInputs.city.value,
     zipCode: addressInputs.zipCode.value,
   };
+  clearCheckoutRequestId();
   status.textContent = saveOrderAddress(address);
   render();
 }

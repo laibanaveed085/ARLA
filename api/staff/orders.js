@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     await requireStaff(req);
     if (req.method === "GET") {
       const orders = await supabaseRequest(
-        "/rest/v1/orders?select=*&order=created_at.desc&limit=100",
+        "/rest/v1/orders?select=*&payment_status=in.(manual,paid)&order=created_at.desc&limit=100",
       );
       return json(res, 200, { orders, statuses: ORDER_STATUSES });
     }

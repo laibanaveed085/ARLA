@@ -72,11 +72,14 @@ function buildOrderCard(order) {
   const status = document.createElement("span");
   status.className = "order-status-label";
   status.textContent = order.status;
+  const payment = document.createElement("span");
+  payment.className = "payment-status-label";
+  payment.textContent = order.payment_status === "paid" ? "Paid · Stripe" : "Manual / legacy";
   const time = document.createElement("time");
   const created = new Date(order.created_at);
   time.dateTime = created.toISOString();
   time.textContent = created.toLocaleString();
-  topRight.append(status, time);
+  topRight.append(status, payment, time);
   top.append(title, topRight);
   card.append(top);
 

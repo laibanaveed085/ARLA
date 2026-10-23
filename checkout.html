@@ -74,20 +74,11 @@
             <label for="order-instructions">Special instructions <span class="muted">(optional)</span>
               <textarea id="order-instructions" name="instructions" maxlength="1000"></textarea>
             </label>
-            <p class="payment-notice">Online payment is not configured. ARLA will confirm the available payment method. Do not enter card details here.</p>
-            <button class="button place-order-button" id="place-order-button" type="submit" disabled>Loading checkout…</button>
+            <p class="payment-notice">You will pay securely on Stripe Checkout. ARLA receives your order only after Stripe confirms payment.</p>
+            <button class="button place-order-button" id="place-order-button" type="submit" disabled>Loading secure checkout…</button>
             <a class="button button-outline checkout-back-link" href="review.html">← Back to Order Review</a>
           </form>
         </div>
-        <section class="order-confirmation" id="order-confirmation" aria-labelledby="confirmation-title" aria-live="polite" hidden>
-          <h2 id="confirmation-title">Thank you — ARLA received your request.</h2>
-          <p id="confirmation-number"></p><p id="confirmation-customer"></p>
-          <p id="confirmation-fulfillment"></p><ul id="confirmation-items"></ul>
-          <p id="confirmation-prices"></p><p id="confirmation-total"></p>
-          <p id="confirmation-time"></p><p id="confirmation-instructions"></p>
-          <p id="confirmation-payment"></p>
-          <a class="button button-outline" href="index.html">Return to ARLA</a>
-        </section>
       </div>
     </section>
   </main>
