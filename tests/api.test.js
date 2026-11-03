@@ -107,9 +107,13 @@ test("creates a server-priced Stripe session and reuses it for an identical requ
       assert.equal(options.headers.Authorization, "Bearer sk_test_arla_test_secret");
       assert.equal(options.headers["Idempotency-Key"], `arla-checkout-${requestId}`);
       const params = new URLSearchParams(options.body);
-      assert.equal(params.get("line_items[0][price_data][unit_amount]"), "1199");
+      assert.equal(params.get("line_items[0][price_data][unit_amount]"), "1800");
       assert.equal(params.get("line_items[0][quantity]"), "2");
-      assert.equal(params.get("line_items[1][price_data][unit_amount]"), "156");
+      assert.equal(params.get("line_items[0][price_data][product_data][description]"), "Single serving");
+      assert.equal(params.get("line_items[1][price_data][unit_amount]"), "2000");
+      assert.equal(params.get("line_items[1][price_data][product_data][name]"), "ARLA Royal Ember Beef Ribs");
+      assert.equal(params.get("line_items[1][price_data][product_data][description]"), "Single serving");
+      assert.equal(params.get("line_items[2][price_data][unit_amount]"), "364");
       assert.equal(params.get("metadata[order_id]"), savedRecord.id);
       return new Response(JSON.stringify({ id: "cs_test_arla123", url: "https://checkout.stripe.com/c/pay/test", status: "open" }), { status: 200 });
     }
@@ -127,7 +131,10 @@ test("creates a server-priced Stripe session and reuses it for an identical requ
       name: "Test Customer",
       phone: "240-555-0100",
       fulfillment: "pickup",
-      items: [{ id: "chicken-biryani", quantity: 1 }],
+      items: [
+        { id: "chicken-biryani", quantity: 1 },
+        { id: "arla-royal-ember-beef-ribs", quantity: 1 },
+      ],
     },
   };
   request.body.items[0].quantity = 2;
@@ -141,10 +148,11 @@ test("creates a server-priced Stripe session and reuses it for an identical requ
   assert.equal(retry.json().checkoutUrl, response.json().checkoutUrl);
   assert.equal(sessionCreates, 1);
   assert.equal(savedRecord.payment_status, "pending");
-  assert.equal(savedRecord.items[0].price_cents, 1199);
-  assert.equal(savedRecord.subtotal_cents, 2398);
-  assert.equal(savedRecord.tax_cents, 156);
-  assert.equal(savedRecord.total_cents, 2554);
+  assert.equal(savedRecord.items[0].price_cents, 1800);
+  assert.equal(savedRecord.items[1].price_cents, 2000);
+  assert.equal(savedRecord.subtotal_cents, 5600);
+  assert.equal(savedRecord.tax_cents, 364);
+  assert.equal(savedRecord.total_cents, 5964);
 });
 
 test("does not create another Checkout Session while an enabled asynchronous payment is processing", async (t) => {
@@ -161,11 +169,11 @@ test("does not create another Checkout Session while an enabled asynchronous pay
     address: null,
     instructions: null,
     requested_time: null,
-    items: [{ id: "chicken-biryani", name: "Chicken Biryani", price_cents: 1199, quantity: 1 }],
-    subtotal_cents: 1199,
+    items: [{ id: "chicken-biryani", name: "Chicken Biryani", price_cents: 1800, quantity: 1 }],
+    subtotal_cents: 1800,
     delivery_fee_cents: 0,
-    tax_cents: 78,
-    total_cents: 1277,
+    tax_cents: 117,
+    total_cents: 1917,
     payment_status: "pending",
     checkout_request_id: requestId,
     stripe_checkout_session_id: "cs_test_arla123",

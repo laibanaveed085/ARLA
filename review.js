@@ -113,7 +113,7 @@ function render() {
     const title = document.createElement("strong");
     title.textContent = item.name;
     const unit = document.createElement("span");
-    unit.textContent = `${money.format(item.priceCents / 100)} each`;
+    unit.textContent = `${item.portion || "Single serving"} · ${money.format(item.priceCents / 100)} each`;
     copy.append(title, unit);
 
     const quantity = document.createElement("div");

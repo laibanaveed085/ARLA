@@ -41,7 +41,7 @@ function renderSummary() {
     const row = document.createElement("li");
     row.className = "checkout-summary-row";
     const label = document.createElement("span");
-    label.textContent = `${item.quantity} × ${item.name}`;
+    label.textContent = `${item.quantity} × ${item.name} · ${item.portion || "Single serving"}`;
     const amount = document.createElement("strong");
     amount.textContent = money.format(item.priceCents * item.quantity / 100);
     row.append(label, amount);
