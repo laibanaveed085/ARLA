@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 import { menu } from "../menu-data.js";
 import {
@@ -120,16 +120,21 @@ test("the homepage keeps only a featured menu preview and routes ordering separa
     return [name, Number(price[1]) * 100 + Number(price[2])];
   }));
   for (const item of menu.filter(({ id }) =>
-    ["chicken-biryani", "saag-paneer", "chicken-pasta", "chai"].includes(id))) {
+    ["chicken-biryani", "beef-pulao", "chicken-burger", "pasta"].includes(id))) {
     assert.equal(featuredPrices.get(item.name), item.priceCents, item.name);
   }
 });
 
-test("the ordering menu uses the complete catalog with images, descriptions, and categories", async () => {
+test("the ordering menu uses ARLA-provided photos only and leaves unmatched dishes photo-free", async () => {
   const html = await readFile(new URL("../menu.html", import.meta.url), "utf8");
   const home = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const script = await readFile(new URL("../menu.js", import.meta.url), "utf8");
   const credits = await readFile(new URL("../menu-photo-credits.html", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../styles.css", import.meta.url), "utf8");
+  const imagePages = await Promise.all(
+    ["index.html", "menu.html", "review.html", "checkout.html", "order-confirmation.html"]
+      .map((file) => readFile(new URL(`../${file}`, import.meta.url), "utf8")),
+  );
   assert.match(html, /id="featured-menu-grid"/);
   assert.match(html, /id="full-menu-grid"/);
   assert.match(html, /id="category-nav"/);
@@ -146,31 +151,100 @@ test("the ordering menu uses the complete catalog with images, descriptions, and
   assert.match(script, /item\.description/);
   assert.match(script, /item\.image/);
   assert.match(script, /data-product-controls/);
-  assert.equal(menu.length, 26);
-  assert.ok(menu.every((item) => item.category && item.description && item.image));
-  assert.equal(new Set(menu.map(({ image }) => image)).size, menu.length);
+  assert.equal(menu.length, 27);
+  assert.ok(menu.every((item) => item.category && item.description));
+  const providedPhotoIds = [
+    "chicken-biryani", "chicken-pulao", "beef-pulao", "beef-biryani",
+    "chicken-karahi", "achar-gosht", "nihari", "aloo-gosht",
+    "bhindi-masala", "daal", "chicken-burger", "chicken-pasta",
+    "pasta", "chicken-kebab", "beef-kebab", "shami-kebab",
+    "roti", "fruit-chaat",
+  ];
+  const withoutProvidedPhotos = [
+    "saag-paneer", "aloo-chicken", "spaghetti", "lasagna",
+    "veggie-pasta", "chana", "paratha", "chai", "arla-royal-ember-beef-ribs",
+  ];
+  assert.deepEqual(
+    menu.filter(({ image }) => image).map(({ id }) => id).sort(),
+    providedPhotoIds.sort(),
+  );
+  assert.deepEqual(
+    menu.filter(({ image }) => !image).map(({ id }) => id).sort(),
+    withoutProvidedPhotos.sort(),
+  );
+  assert.equal(new Set(menu.filter(({ image }) => image).map(({ image }) => image)).size, providedPhotoIds.length);
   const kebabItems = menu.filter(({ id }) =>
     ["chicken-kebab", "beef-kebab", "shami-kebab"].includes(id));
   assert.equal(kebabItems.length, 3);
-  assert.ok(kebabItems.every(({ priceCents }) => priceCents === 699));
+  assert.equal(kebabItems.find(({ id }) => id === "chicken-kebab").priceCents, 799);
+  assert.ok(kebabItems.filter(({ id }) => id !== "chicken-kebab")
+    .every(({ priceCents }) => priceCents === 799));
   assert.equal(menu.find(({ id }) => id === "fruit-chaat").name, "Fruit Salad");
-  for (const item of menu) {
+  for (const item of menu.filter(({ image }) => image)) {
     assert.equal(item.image, `/assets/menu/${item.id}.jpg`);
     const image = await readFile(new URL(`../assets/menu/${item.id}.jpg`, import.meta.url));
     assert.ok(image.byteLength > 2000, `${item.name} photo is present`);
   }
-  for (const id of ["chicken-biryani", "saag-paneer", "chicken-pasta", "chai"]) {
+  assert.deepEqual(
+    (await readdir(new URL("../assets/menu/", import.meta.url))).filter((file) => file.endsWith(".jpg")).sort(),
+    menu.filter(({ image }) => image).map(({ id }) => `${id}.jpg`).sort(),
+  );
+  for (const id of ["chicken-biryani", "beef-pulao", "chicken-burger", "pasta"]) {
     assert.ok(home.includes(`src="assets/menu/${id}.jpg"`), `${id} featured image matches its dish`);
   }
-  assert.equal([...credits.matchAll(/<li><strong>/g)].length, menu.length);
-  for (const name of [
-    "Chicken Biryani", "Chicken Pulao", "Beef Pulao", "Beef Biryani",
-    "Chicken Burger", "Chicken Karahi", "Achar Gosht", "Nihari",
-    "Aloo Gosht", "Bhindi Masala", "Pasta", "Daal",
-  ]) {
+  for (const id of ["beef-biryani", "chicken-karahi", "achar-gosht", "nihari"]) {
+    assert.ok(home.includes(`src="assets/menu/${id}.jpg"`), `${id} gallery photo matches its dish`);
+  }
+  assert.equal([...credits.matchAll(/<li><strong>/g)].length, providedPhotoIds.length);
+  for (const item of menu.filter(({ image }) => image)) {
+    const name = item.name.replace(/ \([^)]*\)$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     assert.match(credits, new RegExp(`<strong>${name}</strong> — Photo provided by ARLA\\.`));
   }
+  assert.match(script, /if \(item\.image\)/);
+  assert.doesNotMatch(script, /Illustrative photo/);
+  assert.doesNotMatch(styles, /images\.unsplash\.com/);
+  assert.doesNotMatch(credits, /wikimedia|unsplash|commons/i);
+  assert.ok(imagePages.every((page) => !/images\.unsplash\.com|wikimedia/i.test(page)));
+  assert.match(home, /Photos shown were provided by ARLA/);
+  assert.match(html, /Items without a supplied photo are shown without one/);
   assert.match(html, /href="menu-photo-credits\.html"/);
+});
+
+test("applies the requested prices and portions while preserving a $20 signature exception", () => {
+  const prices = new Map(menu.map(({ id, priceCents }) => [id, priceCents]));
+  const expectedPrices = {
+    "chicken-biryani": 1800,
+    "beef-pulao": 1800,
+    "chicken-karahi": 1800,
+    nihari: 1800,
+    "saag-paneer": 1800,
+    "aloo-gosht": 1800,
+    "chicken-burger": 799,
+    "chicken-pasta": 1299,
+    "veggie-pasta": 1199,
+    "chicken-kebab": 799,
+    "beef-kebab": 799,
+    chana: 1700,
+    roti: 200,
+    paratha: 349,
+    chai: 299,
+    "fruit-chaat": 499,
+    "arla-royal-ember-beef-ribs": 2000,
+  };
+  for (const [id, priceCents] of Object.entries(expectedPrices)) {
+    assert.equal(prices.get(id), priceCents, id);
+  }
+  assert.equal(new Set(menu.map(({ id }) => id)).size, menu.length);
+  assert.ok(menu.every(({ portion }) => typeof portion === "string" && portion.length > 0));
+  assert.ok(menu.filter(({ id }) => id !== "arla-royal-ember-beef-ribs")
+    .every(({ priceCents }) => priceCents <= 1800));
+  assert.ok(menu.every(({ portion }) => !portion.includes("1/2 tray")));
+  const ribs = menu.find(({ id }) => id === "arla-royal-ember-beef-ribs");
+  assert.equal(ribs.category, "ARLA Signature Special");
+  assert.equal(ribs.name, "ARLA Royal Ember Beef Ribs");
+  assert.equal(ribs.description, "Slow-braised beef ribs with a Pakistani spice rub, roasted garlic, caramelized onion gravy, and saffron mashed potatoes.");
+  assert.equal(ribs.signature, true);
+  assert.equal(ribs.image, null);
 });
 
 test("the sitemap and robots file make the public menu discoverable to search crawlers", async () => {

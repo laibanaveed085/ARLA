@@ -20,26 +20,38 @@ const basketBar = document.querySelector("#basket-bar");
 
 if (cartState.error) status.textContent = cartState.error;
 
-function imageUrl(item) {
-  return item.image;
-}
-
 function makeProductCard(item, featured = false) {
   const card = document.createElement("article");
-  card.className = featured ? "product-card product-card-featured" : "product-card";
-  const image = document.createElement("img");
-  image.className = "product-image";
-  image.src = imageUrl(item);
-  image.alt = `Illustrative photo of ${item.name}`;
-  image.width = 720;
-  image.height = 480;
-  image.loading = featured ? "eager" : "lazy";
-  image.decoding = "async";
+  card.className = [
+    "product-card",
+    featured && "product-card-featured",
+    item.signature && "product-card-signature",
+  ].filter(Boolean).join(" ");
+  if (item.signature) {
+    const badge = document.createElement("span");
+    badge.className = "signature-label";
+    badge.textContent = "ARLA SIGNATURE SPECIAL";
+    card.append(badge);
+  }
+  if (item.image) {
+    const image = document.createElement("img");
+    image.className = "product-image";
+    image.src = item.image;
+    image.alt = item.name;
+    image.width = 720;
+    image.height = 480;
+    image.loading = featured ? "eager" : "lazy";
+    image.decoding = "async";
+    card.append(image);
+  }
 
   const details = document.createElement("div");
   details.className = "product-card-details";
   const name = document.createElement("h3");
   name.textContent = item.name;
+  const portion = document.createElement("small");
+  portion.className = "portion-label";
+  portion.textContent = item.portion || "Single serving";
   const description = document.createElement("p");
   description.textContent = item.description;
   const footer = document.createElement("div");
@@ -51,8 +63,8 @@ function makeProductCard(item, featured = false) {
   controls.className = "product-controls";
   controls.dataset.productControls = item.id;
   footer.append(price, controls);
-  details.append(name, description, footer);
-  card.append(image, details);
+  details.append(name, portion, description, footer);
+  card.append(details);
   renderControls(item, controls);
   return card;
 }
@@ -92,7 +104,7 @@ function renderControls(item, host) {
 
 function renderFeatured() {
   featuredGrid.replaceChildren();
-  const featuredIds = ["chicken-biryani", "saag-paneer", "chicken-pasta", "chai"];
+  const featuredIds = ["chicken-biryani", "beef-pulao", "chicken-burger", "pasta"];
   for (const item of menu.filter((entry) => featuredIds.includes(entry.id))) {
     featuredGrid.append(makeProductCard(item, true));
   }
